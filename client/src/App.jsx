@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 
 import LandingPage from "./pages/LandingPage";
+import RegisterPage from "./pages/RegisterPage";
 import UsersPage from "./pages/UsersPage";
 import UserFormPage from "./pages/UserFormPage";
 import AutoRegisterFormPage from "./pages/AutoRegisterFormPage";
@@ -16,6 +17,7 @@ const App = () => {
 
           {/* Public Routes */}
           <Route path="/landing" element={<LandingPage />} />
+          <Route path="/register" element={<RegisterPage />} />
           <Route path="/auto-register" element={<AutoRegisterFormPage />} />
 
           {/* Admin/User Management Routes */}

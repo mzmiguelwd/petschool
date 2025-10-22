@@ -22,4 +22,4 @@ class UserView(viewsets.ModelViewSet):
     queryset = User.objects.all()
 
     # TODO: Consider adding permission classes (e.g., permissions.IsAuthenticated)
-    # to restrict access to these endpoings for security.
+    # to restrict access to these endpoints for security.
