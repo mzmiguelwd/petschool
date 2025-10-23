@@ -82,7 +82,7 @@ const NavbarLanding = () => {
             <SecondaryButton text="Iniciar Sesión" />
           </Link>
 
-          <Link to="/">
+          <Link to="/register">
             <PrimaryButton text="Registrarme" />
           </Link>
         </div>

@@ -6,7 +6,7 @@ import axios from "axios";
  * ensuring consistency (e.g., all requests go to http://localhost:8000/users/api/vi/users/).
  */
 const usersApi = axios.create({
-  baseURL: "http://localhost:8000/users/api/v1/users/",
+  baseURL: "http://localhost:8000/users/api/v1/",
 });
 
 /**
@@ -30,7 +30,7 @@ export const getUser = (id) => usersApi.get(`${id}/`);
  * @param {object} user - The data object for the new user (name, email, etc.).
  * @returns {Promise} Axios promise resolving to the newly created user object.
  */
-export const createUser = (user) => usersApi.post("/", user);
+export const createUser = (userData) => usersApi.post("register/", userData);
 
 /**
  * Deletes a specific user record by ID.
