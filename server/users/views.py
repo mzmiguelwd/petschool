@@ -1,6 +1,6 @@
 from rest_framework import viewsets
-from .serializer import UserSerializer
-from .models import User
+from .serializer import UserRegistrationSerializer
+from .models import CustomUser
 
 # Create your views here.
 
@@ -15,11 +15,11 @@ class UserView(viewsets.ModelViewSet):
 
     # Specifies the serializer class responsible for converting model instances to JSON
     # and validating incoming data.
-    serializer_class = UserSerializer
+    serializer_class = UserRegistrationSerializer
 
     # Defines the base queryset that returns all available User objects.
     # This set of objects will be used for all operations (listing, retrieving, etc.).
-    queryset = User.objects.all()
+    queryset = CustomUser.objects.all()
 
     # TODO: Consider adding permission classes (e.g., permissions.IsAuthenticated)
     # to restrict access to these endpoints for security.

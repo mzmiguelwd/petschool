@@ -1,7 +1,9 @@
-import React, { useRef, useState, useEffect, useMemo, memo } from "react";
+import React, { useRef, useState, useEffect, memo } from "react";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import { toast } from "react-hot-toast";
+import { motion } from "motion/react";
+import { slipeUp } from "../utils/animation";
 import { createUser } from "../api/users.api";
 import {
   CheckCircle,
@@ -31,11 +33,11 @@ const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 const PHONE_REGEX = /^[0-9]{10}$/;
 // Password: Minimum 8, maximum 24 characters. Must include at least one lowercase letter, one uppercase letter, one digit, and one symbol (!@#$%^&*).
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*]).{8,24}$/;
-// Address: Maximum length constant for a basic non-regex length check.
+// Address: Allows alphanumeric characters, spaces, and specific punctuation for addresses. 6-80 characters.
 const ADDRESS_REGEX = /^[a-zA-Z0-9\s\-\#\.\,ñÑ]{6,80}$/;
 
 // --- Input Sub-Component (Re-usable component for form fields) ---
-// Using 'memo' to prevent unnecessary re-renders when parent state changes but props don't.
+// Using 'memo' and 'forwardRed' to optimize performance and pass the ref from RHF.
 const InputField = memo(
   React.forwardRef(
     (
@@ -44,17 +46,18 @@ const InputField = memo(
         label,
         placeholder,
         type = "text",
-        icon: Icon, // Lucide-React Icon
-        note,
+        icon: Icon, // Lucide-React Icon component passed as a prop
+        note, // Validation instruction/tip
         required = true,
-        hasError,
-        isValid,
-        errorMessage,
-        ...rest
+        hasError, // Boolean indicating if RHF found an error for this field
+        isValid, // Boolean indicating if the field's value is valid
+        errorMessage, // The error message to display (from RHF)
+        fieldValue, // Valor actual del campo
+        ...rest // Remaining props (e.g., onChange, onBlur from RHF's register)
       },
-      ref
+      ref // Ref forwarded by React Hook Form's 'register'
     ) => {
-      const isInvalid = hasError;
+      const isInvalid = hasError && fieldValue.trim() !== ""; // Clearer variable name
 
       return (
         <div className="mb-4">
@@ -67,6 +70,7 @@ const InputField = memo(
             {Icon && (
               <Icon size={16} className="mr-2 text-[var(--primary-color)]" />
             )}
+            {/* --- Indicator of required field --- */}
             {label} {required && <span className="text-red-600 ml-1">*</span>}
             {/* --- Valid Indicator (Green Check) --- */}
             <span
@@ -150,9 +154,8 @@ const RegisterPage = () => {
     register,
     watch,
     formState: { errors, isValid, isSubmitting },
-    setFocus: setRHFocus,
   } = useForm({
-    mode: "onTouched",
+    mode: "onChange",
   });
 
   // --- MONITOREO DE CAMPOS ---
@@ -178,7 +181,6 @@ const RegisterPage = () => {
 
     // --- Preparar los datos
     const dataToSend = { ...data };
-    delete dataToSend.match_pwd;
 
     // --- Lógica de Creación (Llamada a la API) ---
     try {
@@ -200,13 +202,41 @@ const RegisterPage = () => {
         // Encontrar el primer error para mostrarlo al usuario
         const firstErrorKey = Object.keys(apiErrors)[0];
         const firstErrorMessage = apiErrors[firstErrorKey][0];
-        setErrMsg(`Error en ${firstErrorKey}: ${firstErrorMessage}`);
+
+        // Diccionario de nombres más legibles para el usuario
+        const fieldLabels = {
+          identification: "Documento de Identificación",
+          name: "Nombre(s)",
+          last_name: "Apellido(s)",
+          email: "Correo Electrónico",
+          phone: "Número Celular",
+          address: "Dirección de Residencia",
+          pwd: "Crear Contraseña",
+          match_pwd: "Confirmar Contraseña",
+        };
+
+        // Buscar nombre legible
+        const readableField = fieldLabels[firstErrorKey] || firstErrorKey;
+
+        // Construir un mensaje más natural
+        let customMessage = `Hubo un problema con ${readableField}: ${firstErrorMessage}`;
+        if (readableField === fieldLabels.identification) {
+          customMessage =
+            "El Documento de Identificación ya existe en el sistema.";
+        }
+
+        setErrMsg(customMessage);
       } else {
-        setErrMsg("Error creando el usuario. Por favor intentalo nuevamente.");
+        setErrMsg(
+          "Ocurrió un error creando el usuario. Por favor inténtalo nuevamente."
+        );
       }
-      toast.error("Error creando el usuario. Por favor intentalo nuevamente.", {
-        style: { background: "#101010", color: "#fff" },
-      });
+      toast.error(
+        "Ocurrió un error creando el usuario. Por favor inténtalo nuevamente.",
+        {
+          style: { background: "#101010", color: "#fff" },
+        }
+      );
     }
 
     setIsLoading(false);
@@ -273,6 +303,7 @@ const RegisterPage = () => {
         hasError={!!errors[props.id]}
         errorMessage={errors[props.id]?.message || props.note}
         isValid={!!watch(props.id) && !errors[props.id]}
+        fieldValue={watch(props.id) || ""}
         // ref={props.id === "identification" ? firstInputRef : null}
       />
     );
@@ -282,7 +313,12 @@ const RegisterPage = () => {
     <div className="bg-gray-50 pt-32">
       <NavbarLanding />
 
-      <section className="w-full max-w-2xl mx-auto bg-white p-8 rounded-2xl shadow-2xl border border-gray-100 mb-18">
+      <motion.section
+        variants={slipeUp(0.3)}
+        initial="initial"
+        animate="animate"
+        className="w-full max-w-2xl mx-auto bg-white p-8 rounded-2xl shadow-2xl border border-gray-100 mb-18"
+      >
         {success ? (
           // --- Success View ---
           //
@@ -301,7 +337,12 @@ const RegisterPage = () => {
           </div>
         ) : (
           // --- Registration Form View ---
-          <div className="">
+          <motion.div
+            variants={slipeUp(0.3)}
+            initial="initial"
+            animate="animate"
+            className=""
+          >
             <h1 className="text-3xl font-extrabold text-gray-900 text-center mb-6">
               Crea tu Cuenta
             </h1>
@@ -448,9 +489,9 @@ const RegisterPage = () => {
                 Iniciar Sesión
               </Link>
             </p>
-          </div>
+          </motion.div>
         )}
-      </section>
+      </motion.section>
 
       <Footer />
     </div>

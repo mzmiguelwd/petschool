@@ -1,4 +1,6 @@
 from django.db import models
+from django.contrib.auth.models import AbstractUser
+from .managers import CustomUserManager
 from django.core.validators import RegexValidator
 
 # --- Custom Validators for Regex Match (Phone and Address) ---
@@ -24,12 +26,13 @@ ADDRESS_REGEX_VALIDATOR = RegexValidator(
 
 # Create your models here.
 
-class User (models.Model):
+class CustomUser (AbstractUser):
     """
-    Basic custom User model.
-    Represents an application user with contact and meta data.
-    Note: This model does not replace Django's AbstractUser for authentication.
-    but serves as a profile/contact model for the application context.
+    Custom User model replacing Django's default User.
+    It inherits password hashing and authentication methods from AbstractUser.
+    
+    Fields like 'first_name', 'last_name', and 'email' are inherited, but we 
+    redefine 'email' for uniqueness and use 'name' and 'last_name' for clarity.
     """
 
     identification = models.CharField(
@@ -39,14 +42,7 @@ class User (models.Model):
         verbose_name="Identificación"
     )
 
-    name = models.CharField(
-        max_length=50, 
-        verbose_name="Nombre(s)")
-
-    last_name = models.CharField(
-        max_length=50, 
-        verbose_name="Apellido(s)")
-
+    # Redefine 'email' for uniqueness and blank/null settings
     email = models.EmailField(
         unique=True, 
         verbose_name="Email")
@@ -63,6 +59,13 @@ class User (models.Model):
         validators=[ADDRESS_REGEX_VALIDATOR],
         verbose_name="Dirección de Residencia"
     )
+
+    username = None
+
+    objects = CustomUserManager()
+    
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['identification', 'first_name', 'last_name', 'phone', 'address']
 
     # --- Metadatos ---
 
