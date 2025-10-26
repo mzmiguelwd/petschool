@@ -53,7 +53,8 @@ INSTALLED_APPS = [
     'drf_spectacular',  # Required for OpenAPI schema generation (Swagger/Redoc)
 
     # Local project apps
-    'users'             # Registered local app for user management
+    'users',             # Registered local app for user management
+    'matriculas'
 ]
 
 MIDDLEWARE = [
