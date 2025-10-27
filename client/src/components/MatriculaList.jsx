@@ -1,5 +1,3 @@
-import React from "react";
-
 const MatriculaList = ({ matriculas, onEdit, onDelete }) => {
   return (
     <div className="my-8">
@@ -13,7 +11,7 @@ const MatriculaList = ({ matriculas, onEdit, onDelete }) => {
           {matriculas.map((matricula) => (
             <div
               key={matricula.id}
-              className="bg-white rounded-lg shadow-md p-6 border border-gray-200"
+              className="bg-white rounded-xl shadow-md p-6 border border-gray-100 hover:shadow-lg hover:scale-[1.02] transition-transform"
             >
               <h4 className="text-xl font-bold text-gray-800 mb-3">
                 {matricula.nombre_perro}

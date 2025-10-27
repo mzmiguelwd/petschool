@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
 const MatriculaForm = ({ onSubmit, initialData = {} }) => {
   const [formData, setFormData] = useState({
@@ -23,7 +23,10 @@ const MatriculaForm = ({ onSubmit, initialData = {} }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg shadow-md">
+    <form
+      onSubmit={handleSubmit}
+      className="bg-white p-8 rounded-2xl shadow-lg space-y-5"
+    >
       <h3 className="text-2xl font-bold mb-6 text-gray-800">
         {initialData.id ? "Editar" : "Nueva"} Matrícula
       </h3>
@@ -117,10 +120,7 @@ const MatriculaForm = ({ onSubmit, initialData = {} }) => {
         </div>
       </div>
 
-      <button
-        type="submit"
-        className="py-3 px-6 w-full rounded-[6px] text-sm font-bold bg-[var(--primary-button)] text-white cursor-pointer transition-all duration-300 hover:bg-[var(--primary-hover)]"
-      >
+      <button className="py-3 px-6 w-full rounded-md font-semibold bg-[var(--primary-button)] text-white hover:bg-[var(--primary-hover)] transition-all duration-200">
         {initialData.id ? "Actualizar" : "Registrar"} Matrícula
       </button>
     </form>

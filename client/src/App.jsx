@@ -6,7 +6,8 @@ import RegisterPage from "./pages/RegisterPage";
 import UsersPage from "./pages/UsersPage";
 import UserFormPage from "./pages/UserFormPage";
 import AutoRegisterFormPage from "./pages/AutoRegisterFormPage";
-
+import MatriculasPage from "./pages/MatriculasPage";
+import MatriculaFormPage from "./pages/MatriculaFormPage";
 const App = () => {
   return (
     <div className="max-w-7xl mx-auto">
@@ -30,6 +31,9 @@ const App = () => {
           {/* Route for editing an existing user. The ":id" segment allows the component
               to read the specific user ID from the URL parameters. */}
           <Route path="/users/:id" element={<UserFormPage />} />
+          <Route path="/matriculas" element={<MatriculasPage />} />
+          <Route path="/matriculas/create" element={<MatriculaFormPage />} />
+          <Route path="/matriculas/:id" element={<MatriculaFormPage />} />
         </Routes>
 
         {/* Global Toast Notifier: Handles all notifications (succes/error messages)
