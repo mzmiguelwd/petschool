@@ -10,4 +10,4 @@ class MatriculaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Matricula
         fields = '__all__'  # Incluye todos los campos del modelo
-        read_only_fields = ('cliente', 'fecha_creacion', 'fecha_actualizacion')
+        read_only_fields = ('cliente', 'fecha_creacion', 'fecha_actualizacion', 'fecha_fin')

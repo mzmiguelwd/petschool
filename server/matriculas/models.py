@@ -1,8 +1,7 @@
-# server/matriculas/models.py
 from django.db import models
 from django.contrib.auth import get_user_model
 
-User = get_user_model()  # Obtiene el modelo de usuario
+User = get_user_model()
 
 class Matricula(models.Model):
     # Estados posibles de una matrícula
@@ -11,38 +10,52 @@ class Matricula(models.Model):
         ('aprobada', 'Aprobada'),
         ('rechazada', 'Rechazada'),
     ]
-    
-    # Servicios que ofrece PETSCHOOL
-    SERVICIOS = [
-        ('obediencia_basica', 'Obediencia Básica'),
-        ('agilidad_canina', 'Agilidad Canina'),
-        ('socializacion', 'Socialización'),
+
+    # Planes de matrícula
+    PLANES = [
+        ('1_mes', '1 mes'),
+        ('1_bimestre', '1 bimestre'),
+        ('1_trimestre', '1 trimestre'),
+        ('6_meses', '6 meses'),
+        ('1_anio', '1 año'),
     ]
 
-    # Relación: cada matrícula pertenece a un cliente
+    # Opciones de transporte
+    TRANSPORTE_OPCIONES = [
+        ('completo', 'Completo'),
+        ('medio', 'Medio (solo mañana o tarde)'),
+        ('sin_transporte', 'Sin transporte'),
+    ]
+
+    # Tamaños de los caninos
+    TAMANOS = [
+        ('mini', 'Mini'),
+        ('pequeno', 'Pequeño'),
+        ('mediano', 'Mediano'),
+        ('grande', 'Grande'),
+    ]
+
+    # Relación con el usuario cliente
     cliente = models.ForeignKey(User, on_delete=models.CASCADE, related_name='matriculas', null=True, blank=True)
 
-    
-    # Datos del perro
-    nombre_perro = models.CharField(max_length=100)
+    # Datos del canino
+    nombre_canino = models.CharField(max_length=100)
     raza = models.CharField(max_length=100)
     edad = models.IntegerField()
-    
-    # Servicio solicitado
-    servicio = models.CharField(max_length=50, choices=SERVICIOS)
-    
-    # Fecha deseada para empezar
-    fecha_inicio = models.DateField()
-    
-    # Observaciones adicionales
+    tamano = models.CharField(max_length=20, choices=TAMANOS, default='mediano')
+
+    # Plan y transporte
+    plan = models.CharField(max_length=20, choices=PLANES, default='1_mes')
+    transporte = models.CharField(max_length=20, choices=TRANSPORTE_OPCIONES, default='sin_transporte')
+
+    # Observaciones y estado
     observaciones = models.TextField(blank=True)
-    
-    # Estado actual de la matrícula
     estado = models.CharField(max_length=20, choices=ESTADOS, default='pendiente')
-    
-    # Fechas automáticas
+
+    # Fechas
+    fecha_inicio = models.DateField()
     fecha_creacion = models.DateTimeField(auto_now_add=True)
     fecha_actualizacion = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"{self.nombre_perro} - {self.servicio} ({self.estado})"
+        return f"{self.nombre_canino} - {self.plan} ({self.estado})"

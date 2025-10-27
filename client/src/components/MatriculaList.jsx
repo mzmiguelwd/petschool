@@ -14,7 +14,7 @@ const MatriculaList = ({ matriculas, onEdit, onDelete }) => {
               className="bg-white rounded-xl shadow-md p-6 border border-gray-100 hover:shadow-lg hover:scale-[1.02] transition-transform"
             >
               <h4 className="text-xl font-bold text-gray-800 mb-3">
-                {matricula.nombre_perro}
+                {matricula.nombre_canino}
               </h4>
               <p className="text-gray-600 mb-2">
                 <span className="font-semibold">Raza:</span> {matricula.raza}
@@ -24,23 +24,18 @@ const MatriculaList = ({ matriculas, onEdit, onDelete }) => {
                 años
               </p>
               <p className="text-gray-600 mb-2">
-                <span className="font-semibold">Servicio:</span>{" "}
-                {matricula.servicio}
+                <span className="font-semibold">Plan:</span>{" "}
+                {matricula.plan.replace("_", " ")}
               </p>
-              <p className="text-gray-600 mb-4">
-                <span className="font-semibold">Estado:</span>
-                <span
-                  className={`ml-2 px-2 py-1 rounded-full text-xs font-medium ${
-                    matricula.estado === "aprobada"
-                      ? "bg-green-100 text-green-800"
-                      : matricula.estado === "rechazada"
-                      ? "bg-red-100 text-red-800"
-                      : "bg-yellow-100 text-yellow-800"
-                  }`}
-                >
-                  {matricula.estado}
-                </span>
+              <p className="text-gray-600 mb-2">
+                <span className="font-semibold">Tamaño:</span>{" "}
+                {matricula.tamano}
               </p>
+              <p className="text-gray-600 mb-2">
+                <span className="font-semibold">Transporte:</span>{" "}
+                {matricula.transporte}
+              </p>
+
               <div className="flex gap-2 mt-4">
                 <button
                   onClick={() => onEdit(matricula)}
