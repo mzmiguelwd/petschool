@@ -24,6 +24,8 @@ from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView, Sp
 
 
 urlpatterns = [
+  
+    path('api/', include('matriculas.urls')),
     # Admin Interface Route: Provides access to Django's built-in administration panel.
     path('admin/', admin.site.urls),
 
