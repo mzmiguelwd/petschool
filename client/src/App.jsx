@@ -20,6 +20,7 @@ const App = () => {
           <Route path="/landing" element={<LandingPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/auto-register" element={<AutoRegisterFormPage />} />
+          <Route path="/user-gestion" element={<UserManagement />} />
 
           {/* Admin/User Management Routes */}
           {/* Displays the list of all users */}
