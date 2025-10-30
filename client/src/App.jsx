@@ -10,6 +10,8 @@ import UserFormPage from "./pages/UserFormPage";
 import AutoRegisterFormPage from "./pages/AutoRegisterFormPage";
 import MatriculasPage from "./pages/MatriculasPage";
 import MatriculaFormPage from "./pages/MatriculaFormPage";
+import UserManagement from "./pages/UserManagement";
+
 const App = () => {
   return (
     <div className="max-w-7xl mx-auto">
@@ -24,6 +26,7 @@ const App = () => {
           <Route path="/equipo" element={<EquipoPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/auto-register" element={<AutoRegisterFormPage />} />
+          <Route path="/manejo" element={<UserManagement />} />
 
           {/* Admin/User Management Routes */}
           {/* Displays the list of all users */}
