@@ -3,6 +3,7 @@ import { Toaster } from "react-hot-toast";
 
 import LandingPage from "./pages/LandingPage";
 import CursosPage from "./pages/CursosPage";
+import EquipoPage from "./pages/EquipoPage";
 import RegisterPage from "./pages/RegisterPage";
 import UsersPage from "./pages/UsersPage";
 import UserFormPage from "./pages/UserFormPage";
@@ -20,6 +21,7 @@ const App = () => {
           {/* Public Routes */}
           <Route path="/landing" element={<LandingPage />} />
           <Route path="/cursos" element={<CursosPage />} />
+          <Route path="/equipo" element={<EquipoPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/auto-register" element={<AutoRegisterFormPage />} />
 

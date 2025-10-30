@@ -12,7 +12,7 @@ export const navbarLinks = [
   {
     id: 3,
     title: "Nuestro Equipo",
-    link: "/",
+    link: "/equipo",
   },
   {
     id: 4,
