@@ -23,7 +23,7 @@ const Hero = () => {
       <div className="w-3/4">
         {/* --- Title --- */}
         <motion.h1
-          className="text-center text-[white] text-5xl font-extrabold"
+          className=" text-[white] text-5xl font-extrabold"
           variants={slipeUp(0.3)}
           initial="initial"
           animate="animate"
@@ -48,7 +48,7 @@ const Hero = () => {
         {/* --- Button Container --- */}
         <div className="flex justify-around">
           <MotionLink
-            to="/"
+            to="/cursos"
             variants={slipeUp(0.7)}
             initial="initial"
             animate="animate"

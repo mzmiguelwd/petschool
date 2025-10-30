@@ -7,12 +7,12 @@ export const navbarLinks = [
   {
     id: 2,
     title: "Cursos",
-    link: "/",
+    link: "/cursos",
   },
   {
     id: 3,
     title: "Nuestro Equipo",
-    link: "/",
+    link: "/equipo",
   },
   {
     id: 4,

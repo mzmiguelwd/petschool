@@ -64,12 +64,12 @@ const NavbarLanding = () => {
             {navbarLinks.map((link) => {
               return (
                 <li key={link.id}>
-                  <a
+                  <Link
                     className="inline-block transform transition-transform duration-300 font-medium text-base sm:text-md hover:scale-110 hover:text-[var(--primary-button)]"
-                    href={link.link}
+                    to={link.link}
                   >
                     {link.title}
-                  </a>
+                  </Link>
                 </li>
               );
             })}

@@ -8,7 +8,7 @@ const LandingCourseCard = ({ card }) => {
     <div
       className="overflow-hidden rounded-xl shadow-2xl transition-transform duration-300 cursor-pointer hover:scale-102"
       onClick={() => {
-        navigate("/");
+        navigate("/cursos");
       }}
     >
       {/* --- Course Image --- */}
