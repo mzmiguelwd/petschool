@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 
+import ScrollToTop from "./components/ScrollToTop";
 import LandingPage from "./pages/LandingPage";
 import CursosPage from "./pages/CursosPage";
 import EquipoPage from "./pages/EquipoPage";
@@ -16,6 +17,8 @@ const App = () => {
   return (
     <div className="max-w-7xl mx-auto">
       <BrowserRouter>
+        <ScrollToTop />
+
         <Routes>
           {/* Default Route: Redirects the root path ("/") to the landing page */}
           <Route path="/" element={<Navigate to="/landing" />} />

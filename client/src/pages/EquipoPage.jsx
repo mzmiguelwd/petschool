@@ -1,3 +1,5 @@
+import { motion } from "motion/react";
+import { slipeUp, slipeDown } from "../utils/animation";
 import { trainers, faqs } from "../components/Landing/data";
 
 import NavbarLanding from "../components/NavbarLanding";
@@ -15,7 +17,12 @@ const EquipoPage = () => {
         {/* Sección 3: Nuestro Equipo */}
         <section className="max-w-5xl mx-auto bg-background-light py-16 sm:py-8">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center max-w-2xl mx-auto">
+            <motion.div
+              variants={slipeUp(0.3)}
+              initial="initial"
+              animate="animate"
+              className="text-center max-w-2xl mx-auto"
+            >
               <h2 className="text-5xl font-bold tracking-tight text-gray-900">
                 Nuestro Equipo
               </h2>
@@ -24,11 +31,17 @@ const EquipoPage = () => {
                 comportamiento canino y dedicados a ayudar a cada perro a
                 alcanzar su máximo potencial.
               </p>
-            </div>
+            </motion.div>
             <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
               {/* Mapeo de los entrenadores */}
               {trainers.map((trainer, index) => (
-                <EntrenadorCard key={index} {...trainer} />
+                <motion.div
+                  variants={slipeDown(0.3)}
+                  initial="initial"
+                  animate="animate"
+                >
+                  <EntrenadorCard key={index} {...trainer} />
+                </motion.div>
               ))}
             </div>
           </div>

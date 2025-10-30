@@ -1,3 +1,5 @@
+import { motion } from "motion/react";
+import { slipeInFromRight, slipeInFromLeft } from "../utils/animation";
 import { cursos } from "../components/Landing/data";
 
 import NavbarLanding from "../components/NavbarLanding";
@@ -13,7 +15,12 @@ const CursosPage = () => {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20">
           <div className="max-w-4xl mx-auto">
             {/* Título y Subtítulo */}
-            <div className="text-center mb-10">
+            <motion.div
+              variants={slipeInFromRight(0.3)}
+              initial="initial"
+              animate="animate"
+              className="text-center mb-10"
+            >
               <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-black ">
                 Cursos y Programas
               </h2>
@@ -28,20 +35,26 @@ const CursosPage = () => {
                 </span>{" "}
                 para matricular a tu canino en el curso de tu preferencia.
               </p>
-            </div>
+            </motion.div>
 
             {/* Lista de Cursos */}
             <div className="grid gap-8">
               {cursos.map((curso) => (
-                <CursosPageCard
-                  key={curso.id}
-                  titulo={curso.titulo}
-                  descripcion={curso.descripcion}
-                  duracion={curso.duracion}
-                  precio={curso.precio}
-                  imagenUrl={curso.imagenUrl}
-                  textoBoton={curso.textoBoton}
-                />
+                <motion.div
+                  variants={slipeInFromLeft(0.3)}
+                  initial="initial"
+                  animate="animate"
+                >
+                  <CursosPageCard
+                    key={curso.id}
+                    titulo={curso.titulo}
+                    descripcion={curso.descripcion}
+                    duracion={curso.duracion}
+                    precio={curso.precio}
+                    imagenUrl={curso.imagenUrl}
+                    textoBoton={curso.textoBoton}
+                  />
+                </motion.div>
               ))}
             </div>
           </div>
