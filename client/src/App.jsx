@@ -12,6 +12,7 @@ import AutoRegisterFormPage from "./pages/AutoRegisterFormPage";
 import MatriculasPage from "./pages/MatriculasPage";
 import MatriculaFormPage from "./pages/MatriculaFormPage";
 import UserManagement from "./pages/UserManagement";
+import ContactPage from "./pages/ContactPage";
 
 const App = () => {
   return (
@@ -29,7 +30,8 @@ const App = () => {
           <Route path="/equipo" element={<EquipoPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/auto-register" element={<AutoRegisterFormPage />} />
-          <Route path="/manejo" element={<UserManagement />} />
+          <Route path="/contacto" element={<ContactPage />} />
+          
 
           {/* Admin/User Management Routes */}
           {/* Displays the list of all users */}
@@ -44,6 +46,7 @@ const App = () => {
           <Route path="/matriculas" element={<MatriculasPage />} />
           <Route path="/matriculas/create" element={<MatriculaFormPage />} />
           <Route path="/matriculas/:id" element={<MatriculaFormPage />} />
+          <Route path="/manejo" element={<UserManagement />} />
         </Routes>
 
         {/* Global Toast Notifier: Handles all notifications (succes/error messages)

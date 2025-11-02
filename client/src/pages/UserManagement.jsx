@@ -60,7 +60,7 @@ const UserManagement = () => {
   return (
     <div className="min-h-screen bg-gray-100 p-6">
       {/* Encabezado */}
-      <h1 className="text-3xl font-bold text-center mb-8 text-green-700">
+      <h1 className="text-3xl font-bold text-gray-800 text-center mb-8">
         Gestión de Usuarios Internos 🐾
       </h1>
 
@@ -71,7 +71,7 @@ const UserManagement = () => {
           <div className="flex justify-end mb-4">
             <button
               onClick={() => setView("create")}
-              className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+              className="py-2 px-6 rounded-lg text-sm font-bold bg-[var(--primary-button)] text-white hover:bg-[var(--primary-hover)] transition-all"
             >
               + Crear Usuario
             </button>
