@@ -8,6 +8,7 @@ import UserFormPage from "./pages/UserFormPage";
 import AutoRegisterFormPage from "./pages/AutoRegisterFormPage";
 import MatriculasPage from "./pages/MatriculasPage";
 import MatriculaFormPage from "./pages/MatriculaFormPage";
+import DirectorDashboard from "./pages/DashboardDirector";
 const App = () => {
   return (
     <div className="max-w-7xl mx-auto">
@@ -34,6 +35,7 @@ const App = () => {
           <Route path="/matriculas" element={<MatriculasPage />} />
           <Route path="/matriculas/create" element={<MatriculaFormPage />} />
           <Route path="/matriculas/:id" element={<MatriculaFormPage />} />
+          <Route path="/director/dashboard" element={<DirectorDashboard />} />
         </Routes>
 
         {/* Global Toast Notifier: Handles all notifications (succes/error messages)
