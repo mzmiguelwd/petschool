@@ -159,7 +159,7 @@ const RegisterPage = () => {
   });
 
   // --- MONITOREO DE CAMPOS ---
-  const pwdValue = watch("pwd", "");
+  const passwordValue = watch("password", "");
   const firstInputRef = useRef(null);
 
   // --- Efecto para enfocar el primer campo ---
@@ -179,13 +179,10 @@ const RegisterPage = () => {
 
     setIsLoading(true);
 
-    // --- Preparar los datos
-    const dataToSend = { ...data };
-
     // --- Lógica de Creación (Llamada a la API) ---
     try {
       // --- Llama a la función que realiza el envío real a la API
-      await createUser(dataToSend);
+      await createUser(data);
 
       // Manejo de éxito
       toast.success("Usuario creado correctamente.", {
@@ -206,13 +203,13 @@ const RegisterPage = () => {
         // Diccionario de nombres más legibles para el usuario
         const fieldLabels = {
           identification: "Documento de Identificación",
-          name: "Nombre(s)",
+          first_name: "Nombre(s)",
           last_name: "Apellido(s)",
           email: "Correo Electrónico",
           phone: "Número Celular",
           address: "Dirección de Residencia",
-          pwd: "Crear Contraseña",
-          match_pwd: "Confirmar Contraseña",
+          password: "Crear Contraseña",
+          match_password: "Confirmar Contraseña",
         };
 
         // Buscar nombre legible
@@ -256,7 +253,7 @@ const RegisterPage = () => {
       case "identification":
         regex = ID_REGEX;
         break;
-      case "name":
+      case "first_name":
         regex = NAME_REGEX;
         break;
       case "last_name":
@@ -271,20 +268,20 @@ const RegisterPage = () => {
       case "address":
         regex = ADDRESS_REGEX;
         break;
-      case "pwd":
+      case "password":
         regex = PWD_REGEX;
         validationMessage =
           "La contraseña no cumple con los requisitos de seguridad.";
         break;
-      case "match_pwd":
+      case "match_password":
         validationRules.validate = (value) =>
-          value === pwdValue || "Las contraseñas no coinciden.";
+          value === passwordValue || "Las contraseñas no coinciden.";
         break;
       default:
         break;
     }
 
-    if (regex && props.id !== "match_pwd") {
+    if (regex && props.id !== "match_password") {
       const finalMessage =
         typeof validationMessage === "string"
           ? validationMessage.replace(/<[^>]*>?/gm, "")
@@ -329,7 +326,7 @@ const RegisterPage = () => {
             </h1>
             <p>Tu cuenta ha sido creada. Ahora puedes iniciar sesión.</p>
             <Link
-              to="/"
+              to="/login"
               className="block mt-6 w-full py-3 px-4 rounded-xl border-2 shadow-lg font-bold cursor-pointer transition-all duration-200 text-[var(--primary-button)] hover:bg-[var(--primary-button)]/20"
             >
               Iniciar Sesión
@@ -375,7 +372,7 @@ const RegisterPage = () => {
               {/* --- Nombre(s) y Apellido(s) --- */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {renderField({
-                  id: "name",
+                  id: "first_name",
                   label: "Nombre(s)",
                   placeholder: "Juan Miguel",
                   icon: User,
@@ -429,7 +426,7 @@ const RegisterPage = () => {
 
               {/* --- Contraseña --- */}
               {renderField({
-                id: "pwd",
+                id: "password",
                 label: "Crear Contraseña",
                 icon: Lock,
                 note: (
@@ -447,7 +444,7 @@ const RegisterPage = () => {
                 type: "password",
               })}
               {renderField({
-                id: "match_pwd",
+                id: "match_password",
                 label: "Confirmar Contraseña",
                 icon: Lock,
                 note: "Debe coincidir exactamente con la contraseña anterior.",

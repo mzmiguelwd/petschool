@@ -32,7 +32,7 @@ class CustomUser (AbstractUser):
     It inherits password hashing and authentication methods from AbstractUser.
     
     Fields like 'first_name', 'last_name', and 'email' are inherited, but we 
-    redefine 'email' for uniqueness and use 'name' and 'last_name' for clarity.
+    redefine 'email' for uniqueness.
     """
 
     identification = models.CharField(
@@ -48,9 +48,7 @@ class CustomUser (AbstractUser):
         verbose_name="Email")
 
     phone = models.CharField(
-        max_length=10, 
-        blank=True, 
-        null=True, 
+        max_length=10,
         validators=[PHONE_REGEX_VALIDATOR], 
         verbose_name="Número Celular")
 
