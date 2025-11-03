@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import NavbarLanding from "../components/NavbarLanding";
-import Footer from "../components/Footer";
+import LandingHeader from "../../components/landing/LandingHeader";
+import LandingFooter from "../../components/landing/LandingFooter";
 import { Facebook, Instagram, MessageCircle, Mail } from "lucide-react";
 import emailjs from "@emailjs/browser";
-import DogImage from "../assets/dog-golden.png"; // puedes cambiarlo por otra imagen del proyecto
-import { slipeUp } from "../utils/animation";
+import DogImage from "../../assets/dog-golden.png"; // puedes cambiarlo por otra imagen del proyecto
+import { slipeUp } from "../../components/landing/utils/animations";
 
-const ContactPage = () => {
+const ContactoPage = () => {
   const [formData, setFormData] = useState({
     nombre: "",
     email: "",
@@ -43,9 +43,9 @@ const ContactPage = () => {
 
   return (
     <div className="bg-gray-50 min-h-screen flex flex-col">
-      <NavbarLanding />
+      <LandingHeader />
 
-      {/* --- Hero Section --- */}
+      {/* ========== Sección: Hero ========== */}
       <section className="relative w-full overflow-hidden">
         <div className="max-w-6xl mx-auto px-6 py-20 grid md:grid-cols-2 gap-10 items-center">
           <motion.div
@@ -79,7 +79,7 @@ const ContactPage = () => {
         </div>
       </section>
 
-      {/* --- Formulario --- */}
+      {/* ========== Sección: Formulario ========== */}
       <main className="flex-grow flex items-center justify-center py-16 px-4">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -152,10 +152,12 @@ const ContactPage = () => {
         </motion.div>
       </main>
 
-      {/* --- Redes sociales --- */}
+      {/* ========== Sección: Redes Sociales ========== */}
       <section className="bg-gray-900 text-white py-10">
         <div className="flex flex-col items-center space-y-4">
-          <h3 className="text-lg font-semibold">También puedes contactarnos por:</h3>
+          <h3 className="text-lg font-semibold">
+            También puedes contactarnos por:
+          </h3>
           <div className="flex space-x-6">
             <a
               href="https://facebook.com/TU_PAGINA"
@@ -191,9 +193,9 @@ const ContactPage = () => {
         </div>
       </section>
 
-      <Footer />
+      <LandingFooter />
     </div>
   );
 };
 
-export default ContactPage;
+export default ContactoPage;

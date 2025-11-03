@@ -1,20 +1,20 @@
 import { motion } from "motion/react";
-import { slipeUp, slipeDown } from "../utils/animation";
-import { trainers, faqs } from "../components/Landing/data";
+import { slipeUp, slipeDown } from "../../components/landing/utils/animations";
+import { entrenadores, faqs } from "../../components/landing/data";
 
-import NavbarLanding from "../components/NavbarLanding";
-import Footer from "../components/Footer";
-import EntrenadorCard from "../components/Landing/EntrenadorCard";
-import FAQItem from "../components/Landing/FAQItem";
-import DogImage from "../assets/landing/nuestro-equipo-image.png";
+import LandingHeader from "../../components/landing/LandingHeader";
+import LandingFooter from "../../components/landing/LandingFooter";
+import EntrenadorCard from "../../components/landing/EquipoEntrenadorCard";
+import FAQItem from "../../components/landing/EquipoFAQItem";
+import DogImage from "../../assets/landing/nuestro-equipo-image.png";
 
 const EquipoPage = () => {
   return (
     <div className="bg-gray-50">
-      <NavbarLanding />
+      <LandingHeader />
 
       <main className="flex-grow mt-15">
-        {/* Sección 3: Nuestro Equipo */}
+        {/* ========== Sección: Nuestro Equipo ========== */}
         <section className="max-w-5xl mx-auto bg-background-light py-16 sm:py-8">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <motion.div
@@ -33,21 +33,21 @@ const EquipoPage = () => {
               </p>
             </motion.div>
             <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-              {/* Mapeo de los entrenadores */}
-              {trainers.map((trainer, index) => (
+              {/* ========== Lista de Entrenadores ========== */}
+              {entrenadores.map((entrenador, index) => (
                 <motion.div
                   variants={slipeDown(0.3)}
                   initial="initial"
                   animate="animate"
                 >
-                  <EntrenadorCard key={index} {...trainer} />
+                  <EntrenadorCard key={index} {...entrenador} />
                 </motion.div>
               ))}
             </div>
           </div>
         </section>
 
-        {/* Sección 2: Filosofía de Entrenamiento */}
+        {/* ========== Sección: Filosofía de Entrenamiento ========== */}
         <section className="py-8 sm:py-8">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="max-w-5xl mx-auto grid md:grid-cols-2 gap-12 items-center">
@@ -75,7 +75,7 @@ const EquipoPage = () => {
           </div>
         </section>
 
-        {/* Sección 1: Nuestra Misión (Hero) */}
+        {/* ========== Sección: Nuestra Misión ========== */}
         <section className="mt-6 flex items-center justify-center">
           <div className=" max-w-5xl mx-auto">
             <h2 className="text-3xl font-bold tracking-tight text-gray-900">
@@ -90,7 +90,7 @@ const EquipoPage = () => {
           </div>
         </section>
 
-        {/* Sección 4: Preguntas Frecuentes */}
+        {/* ========== Sección: Preguntas Frecuentes ========== */}
         <section className="py-8 sm:py-12">
           <div className="max-w-5xl mx-auto ">
             <div className="mx-auto">
@@ -98,7 +98,7 @@ const EquipoPage = () => {
                 Preguntas Frecuentes
               </h2>
               <div className="mt-8 space-y-4 max-w-2xl mx-auto">
-                {/* Mapeo de las preguntas frecuentes */}
+                {/* ========== Lista de Preguntas ========== */}
                 {faqs.map((faq, index) => (
                   <FAQItem key={index} {...faq} />
                 ))}
@@ -108,7 +108,7 @@ const EquipoPage = () => {
         </section>
       </main>
 
-      <Footer />
+      <LandingFooter />
     </div>
   );
 };

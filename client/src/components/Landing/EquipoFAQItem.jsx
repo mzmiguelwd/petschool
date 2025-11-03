@@ -1,8 +1,8 @@
-const FAQItem = ({ question, answer }) => {
+const FAQItem = ({ pregunta, respuesta }) => {
   return (
     <details className="group rounded-lg bg-background-light  p-4 border border-gray-200 ">
       <summary className="summary-arrow flex items-center justify-between cursor-pointer list-none">
-        <span className="font-medium text-gray-900 ">{question}</span>
+        <span className="font-medium text-gray-900 ">{pregunta}</span>
         {/* Ícono de flecha */}
         <svg
           className="h-5 w-5 text-gray-500  transition-transform duration-300 group-open:rotate-180"
@@ -19,7 +19,7 @@ const FAQItem = ({ question, answer }) => {
           ></path>
         </svg>
       </summary>
-      <p className="mt-2 text-sm text-gray-600 ">{answer}</p>
+      <p className="mt-2 text-sm text-gray-600 ">{respuesta}</p>
     </details>
   );
 };

@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { PrimaryButton, SecondaryButton } from "../components/Buttons";
-import { navbarLinks, navbarSocials } from "../data/navbarLandingData";
+import { PrimaryButton, SecondaryButton } from "../Buttons";
+import { links, socials } from "../landing/data";
 
-import DogIcon from "../assets/dog-icon.png";
+import DogIcon from "../../assets/dog-icon.png";
 
-const NavbarLanding = () => {
+const LandingHeader = () => {
   // State to control the visibility of the mobile menu
   const [isOpen, setIsOpen] = useState(false);
 
@@ -61,14 +61,14 @@ const NavbarLanding = () => {
         {/* --- Desktop Navigation Links (Hidden on Mobile) --- */}
         <div className="hidden md:block">
           <ul className="flex space-x-4 sm:space-x-8">
-            {navbarLinks.map((link) => {
+            {links.map((link) => {
               return (
                 <li key={link.id}>
                   <Link
                     className="inline-block transform transition-transform duration-300 font-medium text-base sm:text-md hover:scale-110 hover:text-[var(--primary-button)]"
                     to={link.link}
                   >
-                    {link.title}
+                    {link.titulo}
                   </Link>
                 </li>
               );
@@ -96,7 +96,7 @@ const NavbarLanding = () => {
       >
         {/* --- Mobile Links List --- */}
         <ul className="flex flex-col px-4 py-2">
-          {navbarLinks.map((link) => {
+          {links.map((link) => {
             return (
               <li key={link.id} className="py-2 text-center">
                 <a
@@ -104,7 +104,7 @@ const NavbarLanding = () => {
                   href={link.link}
                   onClick={() => setIsOpen(false)}
                 >
-                  {link.title}
+                  {link.titulo}
                 </a>
               </li>
             );
@@ -113,7 +113,7 @@ const NavbarLanding = () => {
 
         {/* --- Social Icons List --- */}
         <ul className="flex justify-center space-x-4 border-t border-purple-700 px-4 py-3">
-          {navbarSocials.map((link) => {
+          {socials.map((link) => {
             return (
               <li key={link.id}>
                 <a
@@ -137,4 +137,4 @@ const NavbarLanding = () => {
   );
 };
 
-export default NavbarLanding;
+export default LandingHeader;
