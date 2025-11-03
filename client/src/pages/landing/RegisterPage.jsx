@@ -3,8 +3,8 @@ import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import { motion } from "motion/react";
-import { slipeUp } from "../utils/animation";
-import { createUser } from "../api/users.api";
+import { slipeUp } from "../../components/landing/utils/animations";
+import { createUser } from "../../api/users.api";
 import {
   CheckCircle,
   XCircle,
@@ -18,8 +18,8 @@ import {
   Loader2,
 } from "lucide-react";
 
-import NavbarLanding from "../components/NavbarLanding";
-import Footer from "../components/Footer";
+import LandingHeader from "../../components/landing/LandingHeader";
+import LandingFooter from "../../components/landing/LandingFooter";
 
 // --- Regular Expressions (Regex) ---
 
@@ -36,8 +36,7 @@ const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*]).{8,24}$/;
 // Address: Allows alphanumeric characters, spaces, and specific punctuation for addresses. 6-80 characters.
 const ADDRESS_REGEX = /^[a-zA-Z0-9\s\-\#\.\,ñÑ]{6,80}$/;
 
-// --- Input Sub-Component (Re-usable component for form fields) ---
-// Using 'memo' and 'forwardRed' to optimize performance and pass the ref from RHF.
+// ========== Input Sub-Component ==========
 const InputField = memo(
   React.forwardRef(
     (
@@ -61,18 +60,18 @@ const InputField = memo(
 
       return (
         <div className="mb-4">
-          {/* --- Input Label and Validation/Invalid Indicators --- */}
+          {/* ========== Input Label and Validation/Invalid Indicators ========== */}
           <label
             htmlFor={id}
             className="flex text-sm font-semibold text-gray-700 mb-1 items-center"
           >
-            {/* --- Icon rendering using Lucide-React component --- */}
+            {/* ========== Icon rendering using Lucide-React component ========== */}
             {Icon && (
               <Icon size={16} className="mr-2 text-[var(--primary-color)]" />
             )}
-            {/* --- Indicator of required field --- */}
+            {/* ========== Indicator of required field ========== */}
             {label} {required && <span className="text-red-600 ml-1">*</span>}
-            {/* --- Valid Indicator (Green Check) --- */}
+            {/* ========== Valid Indicator (Green Check) ========== */}
             <span
               className={`ml-2 text-green-600 transition-opacity duration-300 ${
                 isValid ? "opacity-100" : "opacity-0"
@@ -81,7 +80,7 @@ const InputField = memo(
             >
               <CheckCircle size={16} />
             </span>
-            {/* --- Invalid Indicator (Red X) --- */}
+            {/* ========== Invalid Indicator (Red X) ========== */}
             <span
               className={`-ml-4 text-red-600 transition-opacity duration-300 ${
                 isInvalid ? "opacity-100" : "opacity-0"
@@ -92,7 +91,7 @@ const InputField = memo(
             </span>
           </label>
 
-          {/* --- Main Input Field --- */}
+          {/* ========== Main Input Field ========== */}
           <input
             type={type}
             id={id}
@@ -117,7 +116,7 @@ const InputField = memo(
             } focus:outline-none focus:ring-1 focus:border-transparent`}
           />
 
-          {/* --- Validation Note/Instructions (Visible only if invalid) --- */}
+          {/* ========== Validation Note/Instructions (Visible only if invalid) ========== */}
           <div
             id={`${id}-note`}
             className={`mt-1 text-xs text-indigo-800 bg-indigo-50 p-2 rounded-lg transition-all duration-300 ${
@@ -159,7 +158,7 @@ const RegisterPage = () => {
   });
 
   // --- MONITOREO DE CAMPOS ---
-  const pwdValue = watch("pwd", "");
+  const passwordValue = watch("password", "");
   const firstInputRef = useRef(null);
 
   // --- Efecto para enfocar el primer campo ---
@@ -179,13 +178,10 @@ const RegisterPage = () => {
 
     setIsLoading(true);
 
-    // --- Preparar los datos
-    const dataToSend = { ...data };
-
     // --- Lógica de Creación (Llamada a la API) ---
     try {
       // --- Llama a la función que realiza el envío real a la API
-      await createUser(dataToSend);
+      await createUser(data);
 
       // Manejo de éxito
       toast.success("Usuario creado correctamente.", {
@@ -206,13 +202,13 @@ const RegisterPage = () => {
         // Diccionario de nombres más legibles para el usuario
         const fieldLabels = {
           identification: "Documento de Identificación",
-          name: "Nombre(s)",
+          first_name: "Nombre(s)",
           last_name: "Apellido(s)",
           email: "Correo Electrónico",
           phone: "Número Celular",
           address: "Dirección de Residencia",
-          pwd: "Crear Contraseña",
-          match_pwd: "Confirmar Contraseña",
+          password: "Crear Contraseña",
+          match_password: "Confirmar Contraseña",
         };
 
         // Buscar nombre legible
@@ -256,7 +252,7 @@ const RegisterPage = () => {
       case "identification":
         regex = ID_REGEX;
         break;
-      case "name":
+      case "first_name":
         regex = NAME_REGEX;
         break;
       case "last_name":
@@ -271,20 +267,20 @@ const RegisterPage = () => {
       case "address":
         regex = ADDRESS_REGEX;
         break;
-      case "pwd":
+      case "password":
         regex = PWD_REGEX;
         validationMessage =
           "La contraseña no cumple con los requisitos de seguridad.";
         break;
-      case "match_pwd":
+      case "match_password":
         validationRules.validate = (value) =>
-          value === pwdValue || "Las contraseñas no coinciden.";
+          value === passwordValue || "Las contraseñas no coinciden.";
         break;
       default:
         break;
     }
 
-    if (regex && props.id !== "match_pwd") {
+    if (regex && props.id !== "match_password") {
       const finalMessage =
         typeof validationMessage === "string"
           ? validationMessage.replace(/<[^>]*>?/gm, "")
@@ -311,7 +307,7 @@ const RegisterPage = () => {
 
   return (
     <div className="bg-gray-50 pt-32">
-      <NavbarLanding />
+      <LandingHeader />
 
       <motion.section
         variants={slipeUp(0.3)}
@@ -329,7 +325,7 @@ const RegisterPage = () => {
             </h1>
             <p>Tu cuenta ha sido creada. Ahora puedes iniciar sesión.</p>
             <Link
-              to="/"
+              to="/login"
               className="block mt-6 w-full py-3 px-4 rounded-xl border-2 shadow-lg font-bold cursor-pointer transition-all duration-200 text-[var(--primary-button)] hover:bg-[var(--primary-button)]/20"
             >
               Iniciar Sesión
@@ -375,7 +371,7 @@ const RegisterPage = () => {
               {/* --- Nombre(s) y Apellido(s) --- */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {renderField({
-                  id: "name",
+                  id: "first_name",
                   label: "Nombre(s)",
                   placeholder: "Juan Miguel",
                   icon: User,
@@ -429,7 +425,7 @@ const RegisterPage = () => {
 
               {/* --- Contraseña --- */}
               {renderField({
-                id: "pwd",
+                id: "password",
                 label: "Crear Contraseña",
                 icon: Lock,
                 note: (
@@ -447,7 +443,7 @@ const RegisterPage = () => {
                 type: "password",
               })}
               {renderField({
-                id: "match_pwd",
+                id: "match_password",
                 label: "Confirmar Contraseña",
                 icon: Lock,
                 note: "Debe coincidir exactamente con la contraseña anterior.",
@@ -493,7 +489,7 @@ const RegisterPage = () => {
         )}
       </motion.section>
 
-      <Footer />
+      <LandingFooter />
     </div>
   );
 };

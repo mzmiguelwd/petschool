@@ -16,7 +16,6 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 
-
 from django.contrib import admin
 from django.urls import path, include
 # Imports for API documentation tools provided by drf-spectacular
@@ -28,12 +27,14 @@ urlpatterns = [
     # Dashboard and Reports Routes: Directs traffic starting with 'api/' to the 'dashboard' application's URL configuration.
     path('api/', include('dashboard.urls')),
 
-    path('api/', include('matriculas.urls')),
     # Admin Interface Route: Provides access to Django's built-in administration panel.
     path('admin/', admin.site.urls),
 
-    # App-Specific Routes: Directs traffic starting with 'users/' to the 'users' application's URL configuration.
-    path('users/', include('users.urls')),
+    # Todas las rutas de autenticación y gestión de usuarios
+    # (Registro, Login, Refresh, CRUD Admin) se incluyen bajo /api/v1/
+    path('api/v1/users/', include('users.urls')),
+  
+    path('api/', include('matriculas.urls')),
 
     # --- API Documentation (drf-spectacular) ---
 

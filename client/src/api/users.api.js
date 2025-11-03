@@ -1,20 +1,36 @@
 import axios from "axios";
 
-/**
- * Creates an axios instance for the User API service.
- * This establishes the base URL for all subsequent user-related requests,
- * ensuring consistency (e.g., all requests go to http://localhost:8000/users/api/vi/users/).
- */
-const usersApi = axios.create({
-  baseURL: "http://localhost:8000/users/api/v1/",
+// Coonfiguración Base
+const BASE_URL = "http://localhost:8000/api/v1/";
+
+// 1. Base Axios Instance for Non-Authenticated Calls (e.g., Login, Register, or public data)
+export const usersApi = axios.create({
+  baseURL: BASE_URL,
+  headers: { "Content-Type": "application/json" },
+});
+
+// 2. Base Axios Instance for Authenticated Calls (will be used later for protected routes)
+export const usersApiPrivate = axios.create({
+  baseURL: BASE_URL,
+  headers: { "Content-Type": "application/json" },
+  withCredentials: true,
 });
 
 /**
+ * Crea un nuevo registro de usuario (Registro).
+ * Corresponde a: POST /api/v1/users/register/
+ * @param {object} userData - El objeto de datos para el nuevo usuario (name, email, password, etc.).
+ * @returns {Promise} Promesa de Axios que resuelve al objeto del usuario recién creado.
+ */
+export const createUser = (userData) =>
+  usersApi.post("users/register/", userData);
+
+/**
  * Fetches all user records from the API.
- * Corresponds to: GET /users/api/v1/users/
+ * Corresponds to: GET /api/v1/users/
  * @returns {Promise} Axios promise resolving to the list of users.
  */
-export const getAllUsers = () => usersApi.get("/");
+export const getAllUsers = () => usersApi.get("users/public-list");
 
 /**
  * Fetches a single user record by ID.
@@ -23,14 +39,6 @@ export const getAllUsers = () => usersApi.get("/");
  * @returns {Promise} Axios promise resolving to the list of users.
  */
 export const getUser = (id) => usersApi.get(`${id}/`);
-
-/**
- * Creates a new user record.
- * Corresponds to: POST /users/api/v1/users/
- * @param {object} user - The data object for the new user (name, email, etc.).
- * @returns {Promise} Axios promise resolving to the newly created user object.
- */
-export const createUser = (userData) => usersApi.post("register/", userData);
 
 /**
  * Deletes a specific user record by ID.

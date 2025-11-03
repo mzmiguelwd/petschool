@@ -1,20 +1,22 @@
 import { motion } from "motion/react";
-import { slipeInFromRight, slipeInFromLeft } from "../utils/animation";
-import { cursos } from "../components/Landing/data";
+import {
+  slipeInFromRight,
+  slipeInFromLeft,
+} from "../../components/landing/utils/animations";
+import { cursosCursos } from "../../components/landing/data";
 
-import NavbarLanding from "../components/NavbarLanding";
-import Footer from "../components/Footer";
-import CursosPageCard from "../components/Landing/CursosPageCard";
+import LandingHeader from "../../components/landing/LandingHeader";
+import LandingFooter from "../../components/landing/LandingFooter";
+import CursosPageCard from "../../components/landing/CursosCard";
 
 const CursosPage = () => {
   return (
     <div className="bg-gray-50">
-      <NavbarLanding />
+      <LandingHeader />
 
       <main className="flex-grow mt-4">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20">
           <div className="max-w-4xl mx-auto">
-            {/* Título y Subtítulo */}
             <motion.div
               variants={slipeInFromRight(0.3)}
               initial="initial"
@@ -37,9 +39,9 @@ const CursosPage = () => {
               </p>
             </motion.div>
 
-            {/* Lista de Cursos */}
+            {/* ========== Lista de Cursos ========== */}
             <div className="grid gap-8">
-              {cursos.map((curso) => (
+              {cursosCursos.map((curso) => (
                 <motion.div
                   variants={slipeInFromLeft(0.3)}
                   initial="initial"
@@ -61,7 +63,7 @@ const CursosPage = () => {
         </div>
       </main>
 
-      <Footer />
+      <LandingFooter />
     </div>
   );
 };

@@ -2,18 +2,27 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 
 import ScrollToTop from "./components/ScrollToTop";
-import LandingPage from "./pages/LandingPage";
-import CursosPage from "./pages/CursosPage";
-import EquipoPage from "./pages/EquipoPage";
-import RegisterPage from "./pages/RegisterPage";
+
+import InicioPage from "./pages/landing/InicioPage";
+import CursosPage from "./pages/landing/CursosPage";
+import EquipoPage from "./pages/landing/EquipoPage";
+import ContactoPage from "./pages/landing/ContactoPage";
+import LoginPage from "./pages/landing/LoginPage";
+import RegisterPage from "./pages/landing/RegisterPage";
+import ProfilePage from "./pages/ProfilePage";
 import UsersPage from "./pages/UsersPage";
 import UserFormPage from "./pages/UserFormPage";
-import AutoRegisterFormPage from "./pages/AutoRegisterFormPage";
 import MatriculasPage from "./pages/MatriculasPage";
 import MatriculaFormPage from "./pages/MatriculaFormPage";
 import DirectorDashboard from "./pages/DashboardDirector";
 import UserManagement from "./pages/UserManagement";
-import ContactPage from "./pages/ContactPage";
+import RequireAuth from "./components/RequireAuth";
+
+const ROLES = {
+  User: 2001,
+  Editor: 1984,
+  Admin: 5150,
+};
 
 const App = () => {
   return (
@@ -22,17 +31,27 @@ const App = () => {
         <ScrollToTop />
 
         <Routes>
-          {/* Default Route: Redirects the root path ("/") to the landing page */}
-          <Route path="/" element={<Navigate to="/landing" />} />
+          {/* Default Route: Redirects the root path ("/") to the inicio page */}
+          <Route path="/" element={<Navigate to="/inicio" />} />
 
           {/* Public Routes */}
-          <Route path="/landing" element={<LandingPage />} />
+
+          {/* Landing Routes */}
+          <Route path="/inicio" element={<InicioPage />} />
           <Route path="/cursos" element={<CursosPage />} />
           <Route path="/equipo" element={<EquipoPage />} />
+          <Route path="/contacto" element={<ContactoPage />} />
+          <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
-          <Route path="/auto-register" element={<AutoRegisterFormPage />} />
-          <Route path="/contacto" element={<ContactPage />} />
-          
+
+          <Route element={<RequireAuth />}>
+            <Route path="/profile" element={<ProfilePage />} />
+          </Route>
+
+          {/* We want to protect these routes */}
+          <Route element={<RequireAuth allowedRoles={[ROLES.User]} />}>
+            <Route path="/" />
+          </Route>
 
           {/* Admin/User Management Routes */}
           {/* Displays the list of all users */}

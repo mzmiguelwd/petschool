@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'corsheaders',      # Enables Cross-Origin Resource Sharing (CORS)
     'rest_framework',   # Enables Django REST Framework for API development
     'drf_spectacular',  # Required for OpenAPI schema generation (Swagger/Redoc)
+    'rest_framework_simplejwt.token_blacklist', # Opcional pero recomendado para manejar la caducidad y revocación de tokens
 
     # Local project apps
     'users',             # Registered local app for user management
@@ -186,6 +187,12 @@ CORS_ALLOWED_ORIGINS = [
 REST_FRAMEWORK = {
     # Sets the default schema class for automatic API documentation (drf-spectacular)
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
 }
 
 # --- DRF Spectacular Settings (OpenAPI/Swagger) ---
@@ -195,4 +202,26 @@ SPECTACULAR_SETTINGS = {
     'VERSION': '1.0.0',
     # Prevents serving the schema file itself alongside the UI
     'SERVE_INCLUDE_SCHEMA': False,
+}
+
+from datetime import timedelta
+
+SIMPLE_JWT = {
+    # 1. Tiempos de Caducidad: Ajusta a tus necesidades de seguridad/usabilidad
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),  # Token de acceso (corto)
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),  # Token de refresco (largo)
+    'ROTATE_REFRESH_TOKENS': True,                  # Genera un nuevo refresh token al usar uno
+    'BLACKLIST_AFTER_ROTATION': True,               # Invalida el refresh token viejo
+    'UPDATE_LAST_LOGIN': False,
+
+    # 2. Encabezado de Autenticación
+    'AUTH_HEADER_TYPES': ('Bearer',), # Tipo de autenticación en el header (Bearer Token)
+    'AUTH_HEADER_NAME': 'HTTP_AUTHORIZATION',
+
+    # 3. Serializadores (Opcional, si usas email en lugar de username)
+    'USER_ID_FIELD': 'id',
+    'USER_ID_CLAIM': 'user_id',
+    'USERNAME_FIELD': 'email',  # Si usas email para login
+    'TOKEN_OBTAIN_SERIALIZER': 'rest_framework_simplejwt.serializers.TokenObtainPairSerializer',
+    # ... otras configuraciones
 }

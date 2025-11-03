@@ -1,6 +1,6 @@
-import { navbarSocials } from "../data/navbarLandingData";
+import { socials } from "../landing/data";
 
-const Footer = () => {
+const LandingFooter = () => {
   return (
     <section className="flex items-center py-4 bg-gray-300/30 font-medium text-gray-500">
       <div className="flex-1"></div>
@@ -12,7 +12,7 @@ const Footer = () => {
       {/* --- Right flexible container --- */}
       <div className="flex flex-1 justify-end">
         <ul className="flex space-x-4 mx-16">
-          {navbarSocials.map((link) => {
+          {socials.map((link) => {
             return (
               <li key={link.id}>
                 <a
@@ -34,4 +34,4 @@ const Footer = () => {
   );
 };
 
-export default Footer;
+export default LandingFooter;
