@@ -24,7 +24,10 @@ from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView, Sp
 
 
 urlpatterns = [
-  
+
+    # Dashboard and Reports Routes: Directs traffic starting with 'api/' to the 'dashboard' application's URL configuration.
+    path('api/', include('dashboard.urls')),
+
     path('api/', include('matriculas.urls')),
     # Admin Interface Route: Provides access to Django's built-in administration panel.
     path('admin/', admin.site.urls),

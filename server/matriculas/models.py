@@ -59,3 +59,12 @@ class Matricula(models.Model):
 
     def __str__(self):
         return f"{self.nombre_canino} - {self.plan} ({self.estado})"
+
+#Provisional mientras se mejora el sistema de asistencia
+class Asistencia(models.Model):
+    matricula = models.ForeignKey('Matricula', on_delete=models.CASCADE, related_name='asistencias')
+    fecha = models.DateField()
+    presente = models.BooleanField(default=True)
+
+    def __str__(self):
+        return f"Asistencia de {self.matricula.nombre_canino} el {self.fecha}"
