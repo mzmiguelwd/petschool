@@ -55,7 +55,8 @@ INSTALLED_APPS = [
 
     # Local project apps
     'users',             # Registered local app for user management
-    'matriculas'
+    'matriculas',
+    'dashboard',
 ]
 
 MIDDLEWARE = [

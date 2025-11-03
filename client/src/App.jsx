@@ -14,6 +14,7 @@ import UsersPage from "./pages/UsersPage";
 import UserFormPage from "./pages/UserFormPage";
 import MatriculasPage from "./pages/MatriculasPage";
 import MatriculaFormPage from "./pages/MatriculaFormPage";
+import DirectorDashboard from "./pages/DashboardDirector";
 import UserManagement from "./pages/UserManagement";
 import RequireAuth from "./components/RequireAuth";
 
@@ -65,6 +66,7 @@ const App = () => {
           <Route path="/matriculas" element={<MatriculasPage />} />
           <Route path="/matriculas/create" element={<MatriculaFormPage />} />
           <Route path="/matriculas/:id" element={<MatriculaFormPage />} />
+          <Route path="/director/dashboard" element={<DirectorDashboard />} />
           <Route path="/manejo" element={<UserManagement />} />
         </Routes>
 
