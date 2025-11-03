@@ -78,7 +78,7 @@ const NavbarLanding = () => {
 
         {/* --- Authentication Buttons (Always Visible) --- */}
         <div className="hidden md:flex items-center gap-4">
-          <Link to="/">
+          <Link to="/login">
             <SecondaryButton text="Iniciar Sesión" />
           </Link>
 

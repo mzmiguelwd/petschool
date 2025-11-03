@@ -2,52 +2,51 @@ from rest_framework import serializers
 from .models import CustomUser
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
-    """
-    Serializer for the User model.
-    Handles converting User instances to JSON and validating incoming data.
-    """
 
-    pwd = serializers.CharField(style={'input_type': 'password'}, write_only=True)
-    match_pwd = serializers.CharField(style={'input_type': 'password'}, write_only=True)
+    password = serializers.CharField(style={'input_type': 'password'}, write_only=True)
+    match_password = serializers.CharField(style={'input_type': 'password'}, write_only=True)
 
-    name = serializers.CharField(source='first_name')
-    last_name = serializers.CharField()
-
-    # Custom format for created_at field.
+    # Custom format for created_at and updated_at field.
     # Ensures the data/time is returned in 'DD/MM/YYYY HH:MM' format and is read-only.
     created_at = serializers.DateTimeField(format="%d/%m/%Y %H:%M", read_only=True)
-
-    # Custom format for updated_at field, also read-only.
     updated_at = serializers.DateTimeField(format="%d/%m/%Y %H:%M", read_only=True)
 
     class Meta:
         # Specifies the model this serializer works with.
         model = CustomUser
 
-        # Includes all fields from the User model in the serialization/deserialization process.
-        fields = ['identification', 'email', 'name', 'last_name', 'phone', 'address', 'pwd', 'match_pwd', 'created_at', 'updated_at']
-
-        read_only_fields = ('created_at', 'updated_at')
+        # Incluye todos los campos de datos, más los campos de validación (contraseñas)
+        fields = ['identification',
+                  'email',
+                  'first_name',
+                  'last_name',
+                  'phone',
+                  'address',
+                  'password',
+                  'match_password',
+                  'created_at',
+                  'updated_at']
     
     def validate(self, data):
-        pwd = data.get('pwd')
-        match_pwd = data.get('match_pwd')
+        password = data.get('password')
+        match_password = data.get('match_password')
 
-        if not pwd:
-            raise serializers.ValidationError({"pwd": "La contraseña es obligatoria."})
+        if not password:
+            raise serializers.ValidationError({"password": "La contraseña es obligatoria."})
             
-        if not match_pwd:
-            raise serializers.ValidationError({"match_pwd": "La confirmación de contraseña es obligatoria."})
+        if not match_password:
+            raise serializers.ValidationError({"match_password": "La confirmación de contraseña es obligatoria."})
             
-        if pwd != match_pwd:
-            raise serializers.ValidationError({"match_pwd": "Las contraseñas no coinciden."})
+        if password != match_password:
+            raise serializers.ValidationError({"match_password": "Las contraseñas no coinciden."})
     
         return data
 
     def create(self, validated_data):
-            password = validated_data.pop('pwd')
-            validated_data.pop('match_pwd')
+            password = validated_data.pop('password')
+            validated_data.pop('match_password') # Elimina este campo antes de pasarlo al modelo
 
+            # Como los demás campos coinciden con el modelo, se pasan directamente
             user = CustomUser.objects.create_user(
                 password=password,
                 **validated_data
