@@ -3,8 +3,8 @@ import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import { motion } from "motion/react";
-import { slipeUp } from "../utils/animation";
-import { createUser } from "../api/users.api";
+import { slipeUp } from "../../components/landing/utils/animations";
+import { createUser } from "../../api/users.api";
 import {
   CheckCircle,
   XCircle,
@@ -18,8 +18,8 @@ import {
   Loader2,
 } from "lucide-react";
 
-import NavbarLanding from "../components/NavbarLanding";
-import Footer from "../components/Footer";
+import LandingHeader from "../../components/landing/LandingHeader";
+import LandingFooter from "../../components/landing/LandingFooter";
 
 // --- Regular Expressions (Regex) ---
 
@@ -36,8 +36,7 @@ const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*]).{8,24}$/;
 // Address: Allows alphanumeric characters, spaces, and specific punctuation for addresses. 6-80 characters.
 const ADDRESS_REGEX = /^[a-zA-Z0-9\s\-\#\.\,ñÑ]{6,80}$/;
 
-// --- Input Sub-Component (Re-usable component for form fields) ---
-// Using 'memo' and 'forwardRed' to optimize performance and pass the ref from RHF.
+// ========== Input Sub-Component ==========
 const InputField = memo(
   React.forwardRef(
     (
@@ -61,18 +60,18 @@ const InputField = memo(
 
       return (
         <div className="mb-4">
-          {/* --- Input Label and Validation/Invalid Indicators --- */}
+          {/* ========== Input Label and Validation/Invalid Indicators ========== */}
           <label
             htmlFor={id}
             className="flex text-sm font-semibold text-gray-700 mb-1 items-center"
           >
-            {/* --- Icon rendering using Lucide-React component --- */}
+            {/* ========== Icon rendering using Lucide-React component ========== */}
             {Icon && (
               <Icon size={16} className="mr-2 text-[var(--primary-color)]" />
             )}
-            {/* --- Indicator of required field --- */}
+            {/* ========== Indicator of required field ========== */}
             {label} {required && <span className="text-red-600 ml-1">*</span>}
-            {/* --- Valid Indicator (Green Check) --- */}
+            {/* ========== Valid Indicator (Green Check) ========== */}
             <span
               className={`ml-2 text-green-600 transition-opacity duration-300 ${
                 isValid ? "opacity-100" : "opacity-0"
@@ -81,7 +80,7 @@ const InputField = memo(
             >
               <CheckCircle size={16} />
             </span>
-            {/* --- Invalid Indicator (Red X) --- */}
+            {/* ========== Invalid Indicator (Red X) ========== */}
             <span
               className={`-ml-4 text-red-600 transition-opacity duration-300 ${
                 isInvalid ? "opacity-100" : "opacity-0"
@@ -92,7 +91,7 @@ const InputField = memo(
             </span>
           </label>
 
-          {/* --- Main Input Field --- */}
+          {/* ========== Main Input Field ========== */}
           <input
             type={type}
             id={id}
@@ -117,7 +116,7 @@ const InputField = memo(
             } focus:outline-none focus:ring-1 focus:border-transparent`}
           />
 
-          {/* --- Validation Note/Instructions (Visible only if invalid) --- */}
+          {/* ========== Validation Note/Instructions (Visible only if invalid) ========== */}
           <div
             id={`${id}-note`}
             className={`mt-1 text-xs text-indigo-800 bg-indigo-50 p-2 rounded-lg transition-all duration-300 ${
@@ -308,7 +307,7 @@ const RegisterPage = () => {
 
   return (
     <div className="bg-gray-50 pt-32">
-      <NavbarLanding />
+      <LandingHeader />
 
       <motion.section
         variants={slipeUp(0.3)}
@@ -490,7 +489,7 @@ const RegisterPage = () => {
         )}
       </motion.section>
 
-      <Footer />
+      <LandingFooter />
     </div>
   );
 };

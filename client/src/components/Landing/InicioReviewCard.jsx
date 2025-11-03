@@ -1,4 +1,4 @@
-import { renderStars } from "../utils/landingRender";
+import { renderStars } from "../landing/utils/InicioRender";
 
 const LandingReviewCard = ({ review }) => {
   return (

@@ -16,6 +16,10 @@ router = routers.DefaultRouter()
 # La ruta base será: /api/v1/users/management/
 router.register(r'management', views.UserViewSet, basename='user-management')
 
+# 2. Rutas PÚBLICAS (Solo Listar y Detalle)
+# Rutas generadas: /api/v1/users/public-list/, /api/v1/users/public-list/{id}/
+# 🚨 Usamos 'public-list' para evitar conflictos con otras rutas.
+router.register(r'public-list', views.PublicUserListViewSet, basename='user-public')
 
 # Define the final URL patterns.
 urlpatterns = [

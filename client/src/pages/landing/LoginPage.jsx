@@ -9,16 +9,16 @@ import React, {
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import { motion } from "motion/react";
-import { slipeUp } from "../utils/animation";
+import { slipeUp } from "../../components/landing/utils/animations";
 import { Mail, Lock, Loader2, Info, UserCircle2, LogOut } from "lucide-react";
-import { usersApi } from "../api/users.api";
+import { usersApi } from "../../api/users.api";
 
-import useAuth from "../hooks/useAuth";
-import NavbarLanding from "../components/NavbarLanding";
-import Footer from "../components/Footer";
-import AuthContext from "../context/AuthProvider";
+import useAuth from "../../hooks/useAuth";
+import LandingHeader from "../../components/landing/LandingHeader";
+import LandingFooter from "../../components/landing/LandingFooter";
+import AuthContext from "../../context/AuthProvider";
 
-// --- Input Sub-Component (Simplificado para el Login) ---
+// ========== Input Sub-Component ==========
 const InputField = memo(
   React.forwardRef(
     (
@@ -37,7 +37,6 @@ const InputField = memo(
     ) => {
       return (
         <div className="mb-4">
-          {/* --- Input Label --- */}
           <label
             htmlFor={id}
             className="flex text-sm font-semibold text-gray-700 mb-1 items-center"
@@ -48,7 +47,6 @@ const InputField = memo(
             {label} {required && <span className="text-red-600 ml-1">*</span>}
           </label>
 
-          {/* --- Main Input Field --- */}
           <input
             type={type}
             id={id}
@@ -67,7 +65,6 @@ const InputField = memo(
   )
 );
 InputField.displayName = "InputField";
-// --- End Input Sub-Component ---
 
 const LOGIN_URL = "/users/auth/";
 
@@ -169,7 +166,7 @@ const LoginPage = () => {
 
   return (
     <div className="bg-gray-50 pt-32 min-h-screen">
-      <NavbarLanding />
+      <LandingHeader />
 
       <motion.section
         variants={slipeUp(0.3)}
@@ -202,10 +199,10 @@ const LoginPage = () => {
           </p>
 
           <form onSubmit={handleSubmit}>
-            {/* --- Campo de Usuario/Email --- */}
+            {/* ========== Email ========== */}
             <InputField
               id="username"
-              label="Usuario o Email"
+              label="Email"
               placeholder="tu.usuario@email.com"
               icon={Mail}
               type="text"
@@ -215,7 +212,7 @@ const LoginPage = () => {
               required
             />
 
-            {/* --- Campo de Contraseña --- */}
+            {/* ========== Contraseña ========== */}
             <InputField
               id="password"
               label="Contraseña"
@@ -227,7 +224,7 @@ const LoginPage = () => {
               required
             />
 
-            {/* --- Botón de Envío --- */}
+            {/* ========== Botón ========== */}
             <button
               type="submit"
               disabled={isLoading || !user || !password} // Deshabilita si carga o campos vacíos
@@ -250,7 +247,7 @@ const LoginPage = () => {
             </button>
           </form>
 
-          {/* --- Enlace a Registro --- */}
+          {/* ========== Enlace a Registro ========== */}
           <p className="text-center mt-6 text-sm text-gray-600">
             ¿Necesitas una cuenta?{" "}
             <Link
@@ -263,7 +260,7 @@ const LoginPage = () => {
         </motion.div>
       </motion.section>
 
-      <Footer />
+      <LandingFooter />
     </div>
   );
 };

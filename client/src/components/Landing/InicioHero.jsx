@@ -1,9 +1,9 @@
 import { motion } from "motion/react";
-import { slipeUp } from "../utils/animation";
+import { slipeUp } from "./utils/animations";
 import { Link } from "react-router-dom";
-import { Button3 } from "../components/Buttons";
+import { Button3 } from "../../components/Buttons";
 
-import HeroFondo from "../assets/hero-fondo.png";
+import HeroFondo from "../../assets/hero-fondo.png";
 
 const bgImage = {
   backgroundImage: `linear-gradient(rgba(25, 34, 16, 0.7) 0%, rgba(25, 34, 16, 0.7) 100%), url(${HeroFondo})`,
@@ -14,7 +14,7 @@ const bgImage = {
 
 const MotionLink = motion.create(Link);
 
-const Hero = () => {
+const InicioHero = () => {
   return (
     <section
       style={bgImage}
@@ -61,4 +61,4 @@ const Hero = () => {
   );
 };
 
-export default Hero;
+export default InicioHero;

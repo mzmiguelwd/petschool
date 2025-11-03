@@ -35,3 +35,9 @@ class MyProfileView(RetrieveAPIView):
     def get_object(self):
         # Asegura que el usuario solo puede acceder a sus propios datos
         return self.request.user
+
+# vista pública
+class PublicUserListViewSet(viewsets.ModelViewSet):
+    serializer_class = UserRegistrationSerializer # Puedes usar este o uno más simple para la gestión
+    queryset = CustomUser.objects.all()
+    permission_classes = [AllowAny]
