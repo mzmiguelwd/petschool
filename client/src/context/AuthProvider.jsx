@@ -1,11 +1,18 @@
-import { createContext, useState } from "react";
+import React, { createContext, useState, useEffect } from "react";
 
-// 1. Create the Context
-const AuthContext = createContext({});
+const AuthContext = createContext();
 
-// 2. Create the Provider Component
 export const AuthProvider = ({ children }) => {
-  const [auth, setAuth] = useState({});
+  const [auth, setAuth] = useState(() => {
+    // inicializar desde localStorage si existe
+    const saved = localStorage.getItem("auth");
+    return saved ? JSON.parse(saved) : { accessToken: null, user: null };
+  });
+
+  useEffect(() => {
+    // persistir cambios
+    localStorage.setItem("auth", JSON.stringify(auth));
+  }, [auth]);
 
   return (
     <AuthContext.Provider value={{ auth, setAuth }}>

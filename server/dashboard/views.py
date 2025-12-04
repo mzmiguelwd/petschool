@@ -1,11 +1,13 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import permissions, viewsets
-from matriculas.models import Matricula, Asistencia
+from matriculas.models import Matricula, Asistencia, User
 from django.db.models import Count
 from django.db.models import Count, F
 from .serializer import (
     DashboardDirectorSerializer,
+    DashboardClienteSerializer,
+    CaninoMatriculadoSerializer,
 )
 import csv
 from django.http import HttpResponse
@@ -105,3 +107,27 @@ class ReporteCSVView(APIView):
         writer.writerows(rows)
 
         return response
+    
+class DashboardClienteView(viewsets.ViewSet):
+    permission_classes = [permissions.AllowAny] # Cambiar a IsAuthenticated luego
+
+    def list(self, request):
+        cliente = request.user
+        matriculas = Matricula.objects.all() #TODO filtrar por cliente=request.user
+        
+        caninos_data = CaninoMatriculadoSerializer(matriculas, many=True).data
+        
+        asistencias_qs = list(
+            Asistencia.objects.values('matricula__nombre_canino')
+            .annotate(total_asistencias=Count('id'))
+        )
+        asistencias_data = [
+            {'nombre_canino': a['matricula__nombre_canino'], 'total_asistencias': a['total_asistencias']}
+            for a in asistencias_qs
+        ]
+        
+        data = {
+            'caninos_matriculados': caninos_data,
+            'asistencias': asistencias_data
+        }
+        return Response(DashboardClienteSerializer(data).data)

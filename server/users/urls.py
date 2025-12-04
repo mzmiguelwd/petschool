@@ -44,5 +44,5 @@ urlpatterns = [
     path("", include(router.urls)),
 
     # 6. Perfil del usuario logueado
-    path("me/", views.MyProfileView.as_view(), name="user-profile"),
+    path("me/", views.ProfileView.as_view(), name="user-profile"),
 ]
