@@ -138,7 +138,7 @@ const LoginPage = () => {
         style: { background: "#101010", color: "#fff" },
       });
 
-      navigate("/profile");
+      navigate("/cliente/dashboard", { replace: true });
     } catch (err) {
       console.error("Error en el login:", err);
 

@@ -10,7 +10,10 @@ const DashboardDirector = () => {
   const [data, setData] = useState(null);
 
   useEffect(() => {
-    getDashboardData().then(setData);
+    getDashboardData().then((resp) => {
+        const directorData = resp?.director ?? resp;
+        setData(directorData);
+    });
   }, []);
 
   const handleLogout = () => {

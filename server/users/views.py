@@ -1,8 +1,12 @@
 from rest_framework import viewsets
-from rest_framework.generics import CreateAPIView, RetrieveAPIView
+from rest_framework.generics import CreateAPIView, RetrieveUpdateAPIView
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from .serializer import UserRegistrationSerializer
 from .models import CustomUser
+from rest_framework.response import Response
+from rest_framework import status
+from .serializer import UserProfileSerializer
+
 
 # Create your views here.
 
@@ -27,13 +31,12 @@ class UserViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
 
 # --- 3. VISTA DE PERFIL (SOLO LECTURA PERSONAL) ---
-class MyProfileView(RetrieveAPIView):
-    """Permite a un usuario autenticado ver solo su propio perfil."""
-    serializer_class = UserRegistrationSerializer # O un serializer de lectura
+class ProfileView(RetrieveUpdateAPIView):
+    serializer_class = UserProfileSerializer
     permission_classes = [IsAuthenticated]
 
     def get_object(self):
-        # Asegura que el usuario solo puede acceder a sus propios datos
+        # Devuelve el usuario autenticado — usado tanto por GET como por PUT/PATCH
         return self.request.user
 
 # vista pública

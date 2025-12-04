@@ -15,6 +15,7 @@ import UserFormPage from "./pages/UserFormPage";
 import MatriculasPage from "./pages/MatriculasPage";
 import MatriculaFormPage from "./pages/MatriculaFormPage";
 import DirectorDashboard from "./pages/DashboardDirector";
+import ClienteDashboard from "./pages/DashboardCliente";
 import UserManagement from "./pages/UserManagement";
 import RequireAuth from "./components/RequireAuth";
 
@@ -43,10 +44,7 @@ const App = () => {
           <Route path="/contacto" element={<ContactoPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
-
-          <Route element={<RequireAuth />}>
-            <Route path="/profile" element={<ProfilePage />} />
-          </Route>
+          <Route path="/profile" element={<ProfilePage />} />
 
           {/* We want to protect these routes */}
           <Route element={<RequireAuth allowedRoles={[ROLES.User]} />}>
@@ -67,6 +65,7 @@ const App = () => {
           <Route path="/matriculas/create" element={<MatriculaFormPage />} />
           <Route path="/matriculas/:id" element={<MatriculaFormPage />} />
           <Route path="/director/dashboard" element={<DirectorDashboard />} />
+          <Route path="/cliente/dashboard" element={<ClienteDashboard />} />
           <Route path="/manejo" element={<UserManagement />} />
         </Routes>
 
