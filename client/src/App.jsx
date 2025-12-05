@@ -18,6 +18,7 @@ import DirectorDashboard from "./pages/DashboardDirector";
 import ClienteDashboard from "./pages/DashboardCliente";
 import UserManagement from "./pages/UserManagement";
 import RequireAuth from "./components/RequireAuth";
+import RegisterCanino from "./pages/RegisterCanino";
 
 const ROLES = {
   User: 2001,
@@ -45,6 +46,7 @@ const App = () => {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/caninos" element={<RegisterCanino />} />
 
           {/* We want to protect these routes */}
           <Route element={<RequireAuth allowedRoles={[ROLES.User]} />}>

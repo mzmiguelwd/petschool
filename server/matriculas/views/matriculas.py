@@ -1,12 +1,8 @@
-from django.shortcuts import render
-
-# Create your views here.
-# server/matriculas/views.py
 from rest_framework import viewsets, permissions
 from rest_framework.decorators import action
-from rest_framework.response import Response
-from .models import Matricula
-from .serializers import MatriculaSerializer
+from ..models import Matricula
+from ..serializers import MatriculaSerializer
+
 
 class MatriculaViewSet(viewsets.ModelViewSet):
     serializer_class = MatriculaSerializer

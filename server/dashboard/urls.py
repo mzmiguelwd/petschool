@@ -1,13 +1,19 @@
+# server/dashboard/urls.py
 from django.urls import path, include
-from rest_framework import routers
-from dashboard import views
+from rest_framework.routers import DefaultRouter
+from .views import (
+    DashboardDirectorView,
+    DashboardClienteView,
+    ReporteCSVView
+)
 
-router = routers.DefaultRouter()
-router.register(r'dashboard/director', views.DashboardDirectorView, basename='dashboard_director')
-router.register(r'dashboard/cliente', views.DashboardClienteView, basename='dashboard_cliente')
+
+router = DefaultRouter()
+router.register(r'director', DashboardDirectorView, basename='dashboard-director')
+router.register(r'cliente', DashboardClienteView, basename='dashboard-cliente')
+
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('dashboard/reporte/<str:tipo>/', views.ReporteCSVView.as_view(), name='reporte_csv'),
+    path('reporte/<str:tipo>/', ReporteCSVView.as_view(), name='reporte-csv'),
 ]
-

@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import { LogOut, Menu, X } from "lucide-react";
+import useAuth from "../hooks/useAuth";
 
 const NavBarCliente = ({ onLogout }) => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const { auth } = useAuth();
 
   const links = [
     { name: "Mi perfil", href: "/profile" },
-    { name: "Mis matrículas", href: "/matriculas" },
+    { name: "Mis Caninos", href: "/caninos" },
     { name: "Historial de pagos", href: "/pagos" },
   ];
 
@@ -16,7 +18,7 @@ const NavBarCliente = ({ onLogout }) => {
         <div className="flex justify-between h-16 items-center">
           {/* LOGO */}
           <div className="flex-shrink-0 text-xl font-bold text-blue-600">
-            🐶 Panel del Usuario
+            🐶 Panel de {auth?.user?.first_name || "Usuario"}
           </div>
 
           {/* Desktop menu */}
@@ -32,11 +34,11 @@ const NavBarCliente = ({ onLogout }) => {
             ))}
 
             <button
-            onClick={onLogout}
-            className="flex items-center space-x-1 bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-lg"
+              onClick={onLogout}
+              className="flex items-center space-x-1 bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-lg"
             >
-            <LogOut className="w-4 h-4" />
-            <span>Salir</span>
+              <LogOut className="w-4 h-4" />
+              <span>Salir</span>
             </button>
           </div>
 
@@ -67,10 +69,10 @@ const NavBarCliente = ({ onLogout }) => {
           <button
             onClick={onLogout}
             className="flex items-center space-x-1 bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-lg"
-            >
+          >
             <LogOut className="w-4 h-4" />
             <span>Salir</span>
-            </button>
+          </button>
         </div>
       )}
     </nav>

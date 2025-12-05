@@ -30,7 +30,9 @@ class DashboardDirectorSerializer(serializers.Serializer):
     ocupacion_por_plan = PlanOccupancySerializer(many=True)
     top_5_asistencia = TopAsistenciaSerializer(many=True)
 
+
 class CaninoMatriculadoSerializer(serializers.ModelSerializer):
+    nombre_canino = serializers.CharField(source="canino.nombre", read_only=True)
     fecha_vencimiento = serializers.SerializerMethodField()
     pago_estado = serializers.SerializerMethodField()
 
@@ -53,11 +55,12 @@ class CaninoMatriculadoSerializer(serializers.ModelSerializer):
             '6_meses': 180,
             '1_anio': 365,
         }
-        fecha_inicio = timezone.now().date() #TODO: obj.fecha_inicio
-        # usar clave por defecto si obj.plan es None/''/False
-        plan_key = getattr(obj, 'plan', None) or '1_mes'
-
+        
+        plan_key = obj.plan or '1_mes'
         dias = duraciones.get(plan_key, 30)
+        
+        fecha_inicio = obj.fecha_inicio
+
         return (fecha_inicio + timedelta(days=dias)).strftime("%Y-%m-%d")
 
     def get_pago_estado(self, obj):

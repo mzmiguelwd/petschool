@@ -109,20 +109,21 @@ class ReporteCSVView(APIView):
         return response
     
 class DashboardClienteView(viewsets.ViewSet):
-    permission_classes = [permissions.AllowAny] # Cambiar a IsAuthenticated luego
+    permission_classes = [permissions.IsAuthenticated]
 
     def list(self, request):
         cliente = request.user
-        matriculas = Matricula.objects.all() #TODO filtrar por cliente=request.user
+        
+        matriculas = Matricula.objects.filter(cliente=cliente)
         
         caninos_data = CaninoMatriculadoSerializer(matriculas, many=True).data
         
         asistencias_qs = list(
-            Asistencia.objects.values('matricula__nombre_canino')
+            Asistencia.objects.values('matricula__canino__nombre')
             .annotate(total_asistencias=Count('id'))
         )
         asistencias_data = [
-            {'nombre_canino': a['matricula__nombre_canino'], 'total_asistencias': a['total_asistencias']}
+            {'nombre_canino': a['matricula__canino__nombre'], 'total_asistencias': a['total_asistencias']}
             for a in asistencias_qs
         ]
         
@@ -130,4 +131,5 @@ class DashboardClienteView(viewsets.ViewSet):
             'caninos_matriculados': caninos_data,
             'asistencias': asistencias_data
         }
+        
         return Response(DashboardClienteSerializer(data).data)

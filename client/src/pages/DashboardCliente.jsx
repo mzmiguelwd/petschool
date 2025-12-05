@@ -3,28 +3,27 @@ import { getDashboardData } from "../api/dashboard.api";
 import NavBarCliente from "../components/NavBarCliente";
 import PetsChart from "../components/charts/PetsChart";
 import AttendanceChart from "../components/charts/AttendanceChart";
+import useUsersApiPrivate from "../hooks/useUsersApiPrivate";
 
 const DashboardCliente = () => {
+  const usersApiPrivate = useUsersApiPrivate();
   const [data, setData] = useState(null);
-  useEffect(() => {
-    getDashboardData().then((resp) => {
-      const clienteData = resp?.cliente ?? resp;
-      setData(clienteData);
-    });
-  }, []);
-  //const token = localStorage.getItem("access"); // Asegúrate que guardas el token al iniciar sesión
 
-  /*useEffect(() => {
+  useEffect(() => {
     const fetchData = async () => {
       try {
-        const result = await getDashboardClienteData(token);
-        setData(result);
+        const resp = await getDashboardData(usersApiPrivate);
+        const clientData = resp?.client ?? resp;
+        setData(clientData);
       } catch (error) {
-        console.error("Error al cargar el dashboard del cliente:", error);
+        console.error("Error al cargar el dashboard:", error);
+        // Manejar errores de autenticación (ej: token no renovado, 401) // En este punto, el interceptor ya debió intentar renovar el token.
       }
     };
+
     fetchData();
-  }, [token]);*/
+    // El useEffect ahora depende de usersApiPrivate, que se recrea si 'auth' o 'refresh' cambia
+  }, [usersApiPrivate]);
 
   const handleLogout = () => {
     // Aquí puedes limpiar el token y redirigir:
@@ -33,7 +32,9 @@ const DashboardCliente = () => {
   };
 
   if (!data) {
-    return <div className="text-center mt-20">Cargando datos del dashboard...</div>;
+    return (
+      <div className="text-center mt-20">Cargando datos del dashboard...</div>
+    );
   }
 
   return (

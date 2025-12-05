@@ -1,19 +1,24 @@
-import { usersApi } from "../api/users.api";
+import { usersApiPrivate } from "../api/users.api";
 import useAuth from "./useAuth";
 
 const useRefreshToken = () => {
   const { setAuth } = useAuth();
 
   const refresh = async () => {
-    const response = await usersApi.get("/refresh", { withCredentials: true });
+    const response = await usersApiPrivate.post(
+      "/users/auth/refresh/",
+      {},
+      { withCredentials: true }
+    );
 
-    setAuth((prev) => {
-      console.log(JSON.stringify(prev));
-      console.log(response.data.accessToken);
-      return { ...prev, accessToken: response.data.accessToken };
-    });
+    const newAccessToken = response.data.access;
 
-    return response.data.acessToken;
+    setAuth((prev) => ({
+      ...prev,
+      accessToken: newAccessToken,
+    }));
+
+    return newAccessToken;
   };
 
   return refresh;
