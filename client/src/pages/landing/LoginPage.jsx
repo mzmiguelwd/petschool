@@ -66,7 +66,7 @@ const InputField = memo(
 );
 InputField.displayName = "InputField";
 
-const LOGIN_URL = "/users/auth/";
+const LOGIN_URL = "/users/auth/login/";
 
 const LoginPage = () => {
   const { setAuth } = useAuth();

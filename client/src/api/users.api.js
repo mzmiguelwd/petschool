@@ -1,3 +1,4 @@
+// usersApi.api.js
 import axios from "axios";
 
 // Coonfiguración Base
@@ -61,7 +62,7 @@ function _readAuth() {
   const raw = localStorage.getItem("auth");
   if (!raw) return null;
   try {
-    const parsed = JSON.parse(raw);           // puede devolver object o string
+    const parsed = JSON.parse(raw); // puede devolver object o string
     return typeof parsed === "string" ? JSON.parse(parsed) : parsed;
   } catch (e) {
     // si no es JSON válido, devolver null
@@ -78,24 +79,24 @@ function getStoredToken() {
 export async function getProfile() {
   const token = getStoredToken();
   console.log("Token:", token);
-  const res = await fetch('/api/users/me/', {
+  const res = await fetch("/api/users/me/", {
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
     },
-    cache: 'no-cache',
+    cache: "no-cache",
   });
-  console.log(res)
-  if (!res.ok) throw new Error('No se pudo cargar el perfil');
+  console.log(res);
+  if (!res.ok) throw new Error("No se pudo cargar el perfil");
   return res.json();
 }
 
 export async function updateProfile(payload) {
   const token = getStoredToken();
-  const res = await fetch('/api/users/me/', {
-    method: 'PUT',
+  const res = await fetch("/api/users/me/", {
+    method: "PUT",
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
     },
     body: JSON.stringify(payload),

@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'rest_framework',   # Enables Django REST Framework for API development
     'drf_spectacular',  # Required for OpenAPI schema generation (Swagger/Redoc)
     'rest_framework_simplejwt.token_blacklist', # Opcional pero recomendado para manejar la caducidad y revocación de tokens
+    'django_extensions',
 
     # Local project apps
     'users',             # Registered local app for user management
@@ -179,9 +180,21 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # --- CORS Settings ---
 # List of origins that are authorized to make cross-site HTTP requests.
 # This allows the React fron-end (running on port 5173) to communicate with the Django API.
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173"
+
+CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOWED_ORIGINS = ["http://localhost:5173"]
+CSRF_TRUSTED_ORIGINS = ["http://localhost:5173"]
+
+CORS_ALLOW_HEADERS = [
+    "accept",
+    "authorization",
+    "content-type",
+    "origin",
+    "x-csrftoken",
+    "x-requested-with",
 ]
+
+
 
 # --- Django REST Framework Settings ---
 REST_FRAMEWORK = {

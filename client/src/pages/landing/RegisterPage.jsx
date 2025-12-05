@@ -173,6 +173,7 @@ const RegisterPage = () => {
 
   // --- Handles form submission for both creation and update ---
   const onSubmit = handleSubmit(async (data) => {
+    delete data.match_password;
     console.log("Payload a enviar:", data);
     // Final client-side check just before submission
 
