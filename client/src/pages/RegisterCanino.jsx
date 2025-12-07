@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import useUsersApiPrivate from "../hooks/useUsersApiPrivate";
 import useAuth from "../hooks/useAuth";
+import NavbarCliente from "../components/NavbarCliente";
 
 const RegistrarCaninoPage = () => {
   const apiPrivate = useUsersApiPrivate();
@@ -63,12 +64,19 @@ const RegistrarCaninoPage = () => {
     }
   };
 
+  const handleLogout = () => {
+    // Aquí puedes limpiar el token y redirigir:
+    localStorage.removeItem("token");
+    window.location.href = "/login";
+  };
+
   // -----------------------------------------------------------
   // FORMULARIO
   // -----------------------------------------------------------
 
   return (
     <div className="max-w-md mx-auto p-6 bg-white shadow-md rounded-lg">
+      <NavbarCliente onLogout={handleLogout} />
       <h2 className="text-2xl font-bold mb-4">Registrar Canino + Plan</h2>
 
       {success && (

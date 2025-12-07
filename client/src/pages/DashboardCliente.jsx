@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { getDashboardData } from "../api/dashboard.api";
-import NavBarCliente from "../components/NavBarCliente";
+import NavbarCliente from "../components/NavbarCliente";
 import PetsChart from "../components/charts/PetsChart";
 import AttendanceChart from "../components/charts/AttendanceChart";
 import useUsersApiPrivate from "../hooks/useUsersApiPrivate";
@@ -39,7 +39,7 @@ const DashboardCliente = () => {
 
   return (
     <div className="min-h-screen bg-gray-100">
-      <NavBarCliente onLogout={handleLogout} />
+      <NavbarCliente onLogout={handleLogout} />
       <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-6 overflow-visible">
         <div className="md:col-span-2 w-full mt-6 relative z-0">
           <PetsChart data={data.caninos_matriculados} />
