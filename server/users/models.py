@@ -34,6 +34,13 @@ class CustomUser (AbstractUser):
     redefine 'email' for uniqueness.
     """
 
+    ROLES = (
+        ('cliente', 'Cliente'),
+        ('director', 'Director'),
+        ('admin', 'Administrador'),
+    )
+    role = models.CharField(max_length=20, choices=ROLES, default='cliente')
+    
     identification = models.CharField(
         max_length=24,
         unique=True,
