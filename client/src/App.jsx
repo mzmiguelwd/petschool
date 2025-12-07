@@ -14,6 +14,7 @@ import RegisterPage from "./pages/landing/RegisterPage";
 
 // Rutas Generales de Usuario
 import ProfilePage from "./pages/ProfilePage";
+import MisCaninosPage from "./pages/MisCaninosPage";
 import RegisterCanino from "./pages/RegisterCanino";
 
 // Rutas de Dashboards/Administración
@@ -54,7 +55,6 @@ const App = () => {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           {/* <Route path="/unauthorized" element={<UnauthorizedPage />} /> */}
-          <Route path="/profile" element={<ProfilePage />} />
 
           {/* ------------------------------------------------------------- */}
           {/* II. RUTAS PROTEGIDAS POR ROL */}
@@ -65,6 +65,16 @@ const App = () => {
             element={<RequireRole allowedRoles={[DJANGO_ROLES.CLIENTE]} />}
           >
             <Route path="/cliente/dashboard" element={<ClienteDashboard />} />
+            <Route path="/cliente/profile" element={<ProfilePage />} />
+            <Route path="/cliente/caninos" element={<MisCaninosPage />} />
+            <Route
+              path="/cliente/registrar-canino"
+              element={<RegisterCanino />}
+            />
+            <Route
+              path="/cliente/registrar-matricula"
+              element={<RegisterCanino />}
+            />
             <Route path="/caninos" element={<RegisterCanino />} />
           </Route>
 

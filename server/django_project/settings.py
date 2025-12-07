@@ -221,7 +221,7 @@ from datetime import timedelta
 
 SIMPLE_JWT = {
     # 1. Tiempos de Caducidad: Ajusta a tus necesidades de seguridad/usabilidad
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),  # Token de acceso (corto)
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=30),  # Token de acceso (corto)
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),  # Token de refresco (largo)
     'ROTATE_REFRESH_TOKENS': True,                  # Genera un nuevo refresh token al usar uno
     'BLACKLIST_AFTER_ROTATION': True,               # Invalida el refresh token viejo
