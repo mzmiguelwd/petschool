@@ -35,8 +35,22 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
 class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = ['id', 'identification', 'first_name', 'last_name', 'email', 'phone', 'address']
-        read_only_fields = ['id', 'email']  # si quieres que email no sea editable, cambia aquí
+        
+        fields = [
+            'id',
+            'email',
+            'first_name',
+            'last_name',
+            'phone',
+            'address',
+            'identification',
+            'role'
+        ]
+        
+        read_only_fields = [
+            'id',
+            'email'
+        ]
 
     def update(self, instance, validated_data):
         # actualizar sólo campos permitidos
