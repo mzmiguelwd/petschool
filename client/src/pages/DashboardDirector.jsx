@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getDashboardData, downloadCSV } from "../api/dashboard.api";
+import { getDashboardDirectorData, downloadCSV } from "../api/dashboard.api";
 import NavBarDirector from "../components/NavBarDirector";
 import BreedChart from "../components/charts/BreedChart";
 import SizeChart from "../components/charts/SizeChart";
@@ -10,9 +10,9 @@ const DashboardDirector = () => {
   const [data, setData] = useState(null);
 
   useEffect(() => {
-    getDashboardData().then((resp) => {
-        const directorData = resp?.director ?? resp;
-        setData(directorData);
+    getDashboardDirectorData().then((resp) => {
+      const directorData = resp?.director ?? resp;
+      setData(directorData);
     });
   }, []);
 

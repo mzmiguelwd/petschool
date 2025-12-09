@@ -10,7 +10,7 @@ import EquipoPage from "./pages/landing/EquipoPage";
 import ContactoPage from "./pages/landing/ContactoPage";
 import LoginPage from "./pages/landing/LoginPage";
 import RegisterPage from "./pages/landing/RegisterPage";
-// import UnauthorizedPage from "./pages/UnauthorizedPage"; // Asumo que tienes esta página
+import UnauthorizedPage from "./pages/UnauthorizedPage";
 
 // Rutas Generales de Usuario
 import ProfilePage from "./pages/ProfilePage";
@@ -19,7 +19,8 @@ import RegisterCanino from "./pages/RegisterCanino";
 
 // Rutas de Dashboards/Administración
 import ClienteDashboard from "./pages/DashboardCliente";
-import DirectorDashboard from "./pages/DashboardDirector";
+// import DirectorDashboard from "./pages/DashboardDirector";
+import AttendanceDirectorPage from "./pages/AttendanceDirectorPage";
 // import AdminDashboard from "./pages/DashboardAdmin"; // Necesitas crear esta si no existe
 import UsersPage from "./pages/UsersPage";
 import UserFormPage from "./pages/UserFormPage";
@@ -54,7 +55,7 @@ const App = () => {
           <Route path="/contacto" element={<ContactoPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
-          {/* <Route path="/unauthorized" element={<UnauthorizedPage />} /> */}
+          <Route path="/unauthorized" element={<UnauthorizedPage />} />
 
           {/* ------------------------------------------------------------- */}
           {/* II. RUTAS PROTEGIDAS POR ROL */}
@@ -86,7 +87,10 @@ const App = () => {
               />
             }
           >
-            <Route path="/director/dashboard" element={<DirectorDashboard />} />
+            <Route
+              path="/director/dashboard"
+              element={<AttendanceDirectorPage />}
+            />
             {/* Las rutas de gestión de matrículas generalmente son para Director/Admin */}
             <Route path="/matriculas" element={<MatriculasPage />} />
             <Route path="/matriculas/create" element={<MatriculaFormPage />} />

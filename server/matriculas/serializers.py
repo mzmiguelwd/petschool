@@ -23,6 +23,12 @@ class CaninoSerializer(serializers.ModelSerializer):
         read_only_fields = ('fecha_creacion', 'fecha_actualizacion')
 
 
+class AsistenciaBulkSerializer(serializers.Serializer):
+    matricula_id = serializers.IntegerField()
+    fecha = serializers.DateField()
+    presente = serializers.BooleanField()
+
+
 # ===================================================================
 # 1. SERIALIZADOR PARA LAS ASISTENCIAS (AttendanceChart)
 # ===================================================================

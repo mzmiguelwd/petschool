@@ -27,6 +27,19 @@ export const getDashboardData = (apiInstance) => {
     });
 };
 
+export const getDashboardDirectorData = (apiInstance) => {
+  return apiInstance
+    .get("dashboard/director/")
+    .then((response) => response.data)
+    .catch((error) => {
+      console.error(
+        "Fallo al obtener datos del dashboard después de intentos:",
+        error
+      );
+      throw error;
+    });
+};
+
 // export const getDashboardData1 = async () => {
 //   // Fetch both director and cliente data concurrently
 //   const [directorRes, clienteRes] = await Promise.all([
