@@ -35,7 +35,7 @@ const NavbarAdmin = () => {
   return (
     <nav className="fixed top-0 left-0 z-50 w-full bg-[#f7f8f6]/80 backdrop-blur-md">
       <div className="flex items-center justify-between px-4 py-3 sm:px-12 sm:py-3">
-        {/* --- Logo and Title Section --- */}
+
         <div className="flex items-center gap-4">
           <svg
             className="h-8 w-8 text-[var(--primary-color)]"
@@ -43,12 +43,8 @@ const NavbarAdmin = () => {
             viewBox="0 0 48 48"
             xmlns="http://www.w3.org/2000/svg"
           >
-            <path
-              d="M6 6H42L36 24L42 42H6L12 24L6 6Z"
-              fill="currentColor"
-            ></path>
+            <path d="M6 6H42L36 24L42 42H6L12 24L6 6Z" fill="currentColor" />
           </svg>
-          {/* --- Title --- */}
           <h2 className="text-xl font-bold">PetSchool</h2>
         </div>
 
@@ -82,7 +78,6 @@ const NavbarAdmin = () => {
             </svg>
         </button>
 
-        {/* --- Desktop Navigation Links --- */}
         <div className="hidden md:block">
           <ul className="flex space-x-4 sm:space-x-8">
             {navbarLinks.map((link) => {
@@ -144,6 +139,7 @@ const NavbarAdmin = () => {
           </li>
         </ul>
       </div>
+
     </nav>
   );
 };
