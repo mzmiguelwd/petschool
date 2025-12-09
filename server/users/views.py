@@ -12,7 +12,68 @@ from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
 )
+<<<<<<< Updated upstream
 
+=======
+from .utils import check_recaptcha
+from django.conf import settings
+
+class RecaptchaTokenObtainPairView(TokenObtainPairView):
+    """
+    Extiende la vista estándar de JWT para requerir la validación de reCAPTCHA v2
+    antes de emitir los tokens de acceso y refresco.
+    """
+    permission_classes = [permissions.AllowAny]
+
+    def post(self, request, *args, **kwargs):
+        # 1. Obtener el token de reCAPTCHA desde el cuerpo de la solicitud (React)
+        recaptcha_token = request.data.get('g-recaptcha-response')
+        
+        if not recaptcha_token:
+            return Response(
+                {"detail": "El token de reCAPTCHA es obligatorio."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        # 2. VALIDAR EL RECAPTCHA
+        if settings.ENV == "test" and recaptcha_token == "test-token":
+            # Saltamos la verificación real
+            is_valid_recaptcha = True
+        else:
+            # Validación normal
+            is_valid_recaptcha = check_recaptcha(recaptcha_token)
+
+        if not is_valid_recaptcha:
+            # 3. Denegar si la verificación de reCAPTCHA falla
+            return Response(
+                {"detail": "Fallo en la verificación de seguridad reCAPTCHA."},
+                status=status.HTTP_403_FORBIDDEN
+            )
+
+        # 4. Si el reCAPTCHA es válido, procedemos con el LOGIN estándar de JWT
+        # Esto llama al serializador subyacente que verifica credenciales (usuario/password)
+        response = super().post(request, *args, **kwargs)
+
+        # Si el login JWT fue exitoso, y quieres usar cookies (como en tu CookieTokenRefreshView):
+        if response.status_code == status.HTTP_200_OK:
+            # Si estás implementando un sistema de cookies, extrae el token de refresco 
+            # y configúralo en la cookie, luego elimínalo del cuerpo de la respuesta JSON.
+            
+            refresh_token = response.data.get("refresh")
+            if refresh_token:
+                response.set_cookie(
+                    key="refresh_token",
+                    value=refresh_token,
+                    httponly=True,
+                    secure=False,  # Usar True en producción con HTTPS
+                    samesite="Lax",
+                    max_age=86400 * 7, # 7 días, por ejemplo
+                    path="/api/v1/users/auth/" # Ajusta la ruta base de tus rutas JWT
+                )
+                del response.data['refresh'] # Quitarlo de la respuesta JSON
+        
+        return response
+>>>>>>> Stashed changes
 
 class RegisterView(CreateAPIView):
     """Permite el registro de un nuevo usuario sin requerir autenticación."""
