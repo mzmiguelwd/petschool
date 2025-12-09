@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from "react";
 import useUsersApiPrivate from "../hooks/useUsersApiPrivate";
-import NavbarDirector from "../components/NavbarDirector"; // Asumo que tienes uno, o usa el genérico
+import NavbarDirector from "../components/NavBarDirector"; // Asumo que tienes uno, o usa el genérico
 import { format, addDays, subDays } from "date-fns";
 import { es } from "date-fns/locale";
 import {
@@ -18,6 +18,12 @@ import { toast } from "react-hot-toast";
 const AttendanceDirectorPage = () => {
   const apiPrivate = useUsersApiPrivate();
 
+  const handleLogout = () => {
+    // Aquí puedes limpiar el token y redirigir:
+    localStorage.removeItem("token");
+    window.location.href = "/login";
+  };
+  
   // Estado
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [students, setStudents] = useState([]);
@@ -98,7 +104,7 @@ const AttendanceDirectorPage = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
-      <NavbarDirector /> {/* Tu Navbar de Director */}
+      <NavbarDirector onLogout={handleLogout}/> {/* Tu Navbar de Director */}
       <main className="flex-1 max-w-5xl w-full mx-auto p-4 md:p-6">
         {/* --- HEADER: Fecha y Estadísticas --- */}
         <div className="bg-white rounded-2xl shadow-sm p-6 mb-6">

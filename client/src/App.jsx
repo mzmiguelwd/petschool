@@ -31,6 +31,7 @@ import UserManagement from "./pages/UserManagement";
 
 // Componente de Protección
 import RequireRole from "./components/RequireRole";
+import DashboardDirector from "./pages/DashboardDirector";
 
 // --- Definición de Roles (Coincide con Django: cliente, director, admin) ---
 const DJANGO_ROLES = {
@@ -88,12 +89,13 @@ const App = () => {
           >
             <Route
               path="/director/dashboard"
-              element={<AttendanceDirectorPage />}
+              element={<DashboardDirector />}
             />
             {/* Las rutas de gestión de matrículas generalmente son para Director/Admin */}
             <Route path="/matriculas" element={<MatriculasPage />} />
             <Route path="/matriculas/create" element={<MatriculaFormPage />} />
             <Route path="/matriculas/:id" element={<MatriculaFormPage />} />
+            <Route path="/director/asistencias" element={<AttendanceDirectorPage />} />
           </Route>
 
           {/* 3. Rutas EXCLUSIVAS para ADMINISTRADORES (Rol: 'admin') */}

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { getDashboardData } from "../api/dashboard.api";
-import NavbarCliente from "../components/NavbarCliente";
+import NavbarCliente from "../components/NavBarCliente";
 import PetsChart from "../components/charts/PetsChart";
 import AttendanceChart from "../components/charts/AttendanceChart";
 import useUsersApiPrivate from "../hooks/useUsersApiPrivate";

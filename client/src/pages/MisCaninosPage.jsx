@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import useUsersApiPrivate from "../hooks/useUsersApiPrivate";
 import useAuth from "../hooks/useAuth";
-import NavbarCliente from "../components/NavbarCliente";
+import NavbarCliente from "../components/NavBarCliente";
 import { PlusCircle, Dog, Loader2, Edit, Trash2 } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { Link } from "react-router-dom";
