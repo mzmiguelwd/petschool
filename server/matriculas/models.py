@@ -89,9 +89,16 @@ class Matricula(models.Model):
     fecha_inicio = models.DateField()
     fecha_creacion = models.DateTimeField(auto_now_add=True)
     fecha_actualizacion = models.DateTimeField(auto_now=True)
+    
+    def is_active(self):
+        return self.estado == "aprobada" and (
+            not self.fecha_vencimiento or self.fecha_vencimiento >= timezone.now().date()
+        )
+
 
     def __str__(self):
         return f"{self.canino.nombre} - {self.plan} ({self.estado})"
+    
 
 # Provisional mientras se mejora el sistema de asistencia
 class Asistencia(models.Model):

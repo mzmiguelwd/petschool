@@ -1,4 +1,4 @@
-# server/matriculas/urls_matriculas.py
+# server/matriculas/urls_caninos.py
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from .views.caninos import CaninoViewSet
