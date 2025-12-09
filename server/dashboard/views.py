@@ -13,7 +13,7 @@ import csv
 from django.http import HttpResponse
 
 class DashboardDirectorView(viewsets.ViewSet):
-    permission_classes = [permissions.AllowAny]  # luego cambiar a IsAuthenticated
+    permission_classes = [permissions.IsAuthenticated]
 
     def list(self, request):
         #Cantidad de matrículas por raza

@@ -1,12 +1,24 @@
 from rest_framework import serializers
 from .models import Matricula, Asistencia, Canino
 
-
-
-
 # ============================================================
-# 2. ASISTENCIAS (Dashboard)
+# 1. SERIALIZADORES DE UTILIDAD (No atados a un modelo específico)
 # ============================================================
+
+class AsistenciaBulkSerializer(serializers.Serializer):
+    """
+    Serializer para validar el array de objetos que llega desde
+    AttendanceDirectorPage para guardar la asistencia masiva.
+    """
+    matricula_id = serializers.IntegerField()
+    fecha = serializers.DateField()
+    presente = serializers.BooleanField()
+    
+    
+# ============================================================
+# 2. ASISTENCIAS (Dashboard / Lectura)
+# ============================================================
+
 class AsistenciaDashboardSerializer(serializers.ModelSerializer):
     nombre_canino = serializers.CharField(
         source='matricula.canino.nombre', read_only=True
