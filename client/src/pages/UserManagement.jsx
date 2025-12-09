@@ -5,6 +5,7 @@ import {
   updateUser,
   deleteUser,
 } from "../api/users.api"; // <-- Ajusta la ruta según tu proyecto
+import NavbarAdminMini from "../components/NavbarAdminMini";
 
 const UserManagement = () => {
   const [view, setView] = useState("list");
@@ -36,6 +37,11 @@ const UserManagement = () => {
     console.error("Error cargando usuarios", error);
     alert("❌ Error cargando usuarios");
   }
+};
+
+const handleLogout = () => {
+  localStorage.removeItem("token");
+  window.location.href = "/login";
 };
 
 
@@ -101,6 +107,9 @@ const UserManagement = () => {
 
   return (
     <div className="min-h-screen bg-gray-100 p-6">
+
+      <NavbarAdminMini onLogout={handleLogout} />
+
       <h1 className="text-3xl font-bold text-gray-800 text-center mb-8">
         Gestión de Usuarios Internos 🐾
       </h1>
