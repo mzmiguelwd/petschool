@@ -74,5 +74,5 @@ class AsistenciaCaninoSerializer(serializers.Serializer):
 
 
 class DashboardClienteSerializer(serializers.Serializer):
-    caninos_matriculados = CaninoMatriculadoSerializer(many=True)
-    asistencias = AsistenciaCaninoSerializer(many=True)
+    caninos_matriculados = serializers.ListField()
+    asistencias = serializers.ListField()

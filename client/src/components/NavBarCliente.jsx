@@ -12,7 +12,7 @@ const NavbarCliente = ({ onLogout }) => {
     { name: "Dashboard", href: "/cliente/dashboard" },
     { name: "Perfil", href: "/cliente/profile" },
     { name: "Caninos", href: "/cliente/caninos" },
-    { name: "Matriculas", href: "/cliente/registrar-matricula" },
+    { name: "Matriculas", href: "/cliente/matriculas" },
   ];
 
   return (

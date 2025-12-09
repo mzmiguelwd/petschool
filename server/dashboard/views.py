@@ -114,14 +114,18 @@ class DashboardClienteView(viewsets.ViewSet):
     def list(self, request):
         cliente = request.user
         
-        matriculas = Matricula.objects.filter(cliente=cliente)
-        
+        # MATRÍCULAS SOLO DEL CLIENTE
+        matriculas = Matricula.objects.filter(canino__cliente=cliente)
         caninos_data = CaninoMatriculadoSerializer(matriculas, many=True).data
         
-        asistencias_qs = list(
-            Asistencia.objects.values('matricula__canino__nombre')
+        # ASISTENCIAS SOLO DEL CLIENTE
+        asistencias_qs = (
+            Asistencia.objects
+            .filter(matricula__canino__cliente=cliente)
+            .values('matricula__canino__nombre')
             .annotate(total_asistencias=Count('id'))
         )
+        
         asistencias_data = [
             {'nombre_canino': a['matricula__canino__nombre'], 'total_asistencias': a['total_asistencias']}
             for a in asistencias_qs

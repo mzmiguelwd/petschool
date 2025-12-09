@@ -16,7 +16,8 @@ import UnauthorizedPage from "./pages/UnauthorizedPage";
 import ProfilePage from "./pages/ProfilePage";
 import MisCaninosPage from "./pages/MisCaninosPage";
 import RegisterCanino from "./pages/RegisterCanino";
-
+import RegistrarMatriculaPage from "./pages/RegistrarMatriculaPage";
+import MisMatriculasPage from "./pages/MisMatriculasPage";
 // Rutas de Dashboards/Administración
 import ClienteDashboard from "./pages/DashboardCliente";
 // import DirectorDashboard from "./pages/DashboardDirector";
@@ -68,14 +69,12 @@ const App = () => {
             <Route path="/cliente/dashboard" element={<ClienteDashboard />} />
             <Route path="/cliente/profile" element={<ProfilePage />} />
             <Route path="/cliente/caninos" element={<MisCaninosPage />} />
-            <Route
-              path="/cliente/registrar-canino"
-              element={<RegisterCanino />}
-            />
+
             <Route
               path="/cliente/registrar-matricula"
-              element={<RegisterCanino />}
+              element={<RegistrarMatriculaPage />}
             />
+            <Route path="/cliente/matriculas" element={<MisMatriculasPage />} />
             <Route path="/caninos" element={<RegisterCanino />} />
           </Route>
 

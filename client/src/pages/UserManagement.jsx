@@ -1,83 +1,114 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import {
+  getAllUsers,
+  createUser,
+  updateUser,
+  deleteUser,
+} from "../api/users.api"; // <-- Ajusta la ruta según tu proyecto
 
 const UserManagement = () => {
-  const [view, setView] = useState("list"); // 'list' | 'create' | 'edit'
-  const [users, setUsers] = useState([
-    { id: 1, name: "Ana Torres", email: "ana@colegiocanino.com", role: "Administrador" },
-    { id: 2, name: "Carlos López", email: "carlos@colegiocanino.com", role: "Asesor de ventas" },
-  ]);
+  const [view, setView] = useState("list");
+  const [users, setUsers] = useState([]);
 
   const [form, setForm] = useState({
-    name: "",
+    id: null,
+    first_name: "",
     email: "",
     role: "Administrador",
-    password: "",
   });
 
   const [filterRole, setFilterRole] = useState("");
   const [filterName, setFilterName] = useState("");
 
-  // ---- CRUD ----
-  const handleCreate = (e) => {
-    e.preventDefault();
-    const newUser = { ...form, id: Date.now() };
-    setUsers([...users, newUser]);
-    alert("Usuario creado correctamente ✅");
-    resetForm();
-    setView("list");
-  };
+  // -----------------------------------------------------
+  // 🔥 1. Cargar usuarios al iniciar
+  // -----------------------------------------------------
+  useEffect(() => {
+    loadUsers();
+  }, []);
 
+  const loadUsers = async () => {
+  try {
+    const res = await getAllUsers();
+    console.log("Usuarios cargados:", res.data); // <-- agrega esto
+    setUsers(res.data);
+  } catch (error) {
+    console.error("Error cargando usuarios", error);
+    alert("❌ Error cargando usuarios");
+  }
+};
+
+
+  // -----------------------------------------------------
+  // 🔥 3. Pasar datos al formulario para editar
+  // -----------------------------------------------------
   const handleEdit = (user) => {
-    setForm(user);
+    setForm({
+      id: user.id,
+      first_name: user.first_name,
+      email: user.email,
+      role: user.role,
+    });
     setView("edit");
   };
 
-  const handleUpdate = (e) => {
+  // -----------------------------------------------------
+  // 🔥 4. Actualizar usuario (PUT API)
+  // -----------------------------------------------------
+  const handleUpdate = async (e) => {
     e.preventDefault();
-    setUsers(users.map((u) => (u.id === form.id ? form : u)));
-    alert("Usuario actualizado ✅");
-    resetForm();
-    setView("list");
+    try {
+      await updateUser(form.id, form);
+      alert("Usuario actualizado correctamente ✅");
+      resetForm();
+      setView("list");
+      loadUsers();
+    } catch (error) {
+      console.error(error);
+      alert("❌ Error al actualizar usuario");
+    }
   };
 
-  const handleDelete = (id) => {
-    if (window.confirm("¿Seguro que deseas eliminar este usuario?")) {
-      setUsers(users.filter((u) => u.id !== id));
+  // -----------------------------------------------------
+  // 🔥 5. Eliminar usuario (DELETE API)
+  // -----------------------------------------------------
+  const handleDelete = async (id) => {
+    if (!window.confirm("¿Seguro que deseas eliminar este usuario?")) return;
+
+    try {
+      await deleteUser(id);
       alert("Usuario eliminado 🗑️");
+      loadUsers();
+    } catch (error) {
+      console.error(error);
+      alert("❌ Error al eliminar usuario");
     }
   };
 
   const resetForm = () =>
-    setForm({ name: "", email: "", role: "Administrador", password: "" });
+    setForm({
+      id: null,
+      first_name: "",
+      email: "",
+      role: "Administrador",
+    });
 
-  // ---- FILTROS ----
   const filteredUsers = users.filter(
     (u) =>
       (filterRole ? u.role === filterRole : true) &&
-      u.name.toLowerCase().includes(filterName.toLowerCase())
+      u.first_name.toLowerCase().includes(filterName.toLowerCase())
   );
 
   return (
     <div className="min-h-screen bg-gray-100 p-6">
-      {/* Encabezado */}
       <h1 className="text-3xl font-bold text-gray-800 text-center mb-8">
         Gestión de Usuarios Internos 🐾
       </h1>
 
-      {/* Vista lista */}
       {view === "list" && (
         <div>
-          {/* Botón crear */}
-          <div className="flex justify-end mb-4">
-            <button
-              onClick={() => setView("create")}
-              className="py-2 px-6 rounded-lg text-sm font-bold bg-[var(--primary-button)] text-white hover:bg-[var(--primary-hover)] transition-all"
-            >
-              + Crear Usuario
-            </button>
-          </div>
+          
 
-          {/* Filtros */}
           <div className="flex flex-wrap gap-4 mb-6">
             <input
               type="text"
@@ -92,12 +123,12 @@ const UserManagement = () => {
               className="border px-3 py-2 rounded"
             >
               <option value="">Todos los roles</option>
-              <option value="Administrador">Administrador</option>
-              <option value="Asesor de ventas">Asesor de ventas</option>
+              <option value="admin">Administrador</option>
+              <option value="cliente">Cliente</option>
+              <option value="director">Director</option>
             </select>
           </div>
 
-          {/* Tabla */}
           <div className="overflow-x-auto">
             <table className="min-w-full bg-white rounded shadow">
               <thead className="bg-green-600 text-white">
@@ -112,7 +143,7 @@ const UserManagement = () => {
                 {filteredUsers.length > 0 ? (
                   filteredUsers.map((user) => (
                     <tr key={user.id} className="border-b hover:bg-gray-50">
-                      <td className="py-2 px-4">{user.name}</td>
+                      <td className="py-2 px-4">{user.first_name}</td>
                       <td className="py-2 px-4">{user.email}</td>
                       <td className="py-2 px-4">{user.role}</td>
                       <td className="py-2 px-4 text-center">
@@ -144,7 +175,6 @@ const UserManagement = () => {
         </div>
       )}
 
-      {/* Formulario crear / editar */}
       {(view === "create" || view === "edit") && (
         <form
           onSubmit={view === "create" ? handleCreate : handleUpdate}
@@ -158,8 +188,8 @@ const UserManagement = () => {
           <input
             type="text"
             className="border w-full px-3 py-2 mb-4 rounded"
-            value={form.name}
-            onChange={(e) => setForm({ ...form, name: e.target.value })}
+            value={form.first_name}
+            onChange={(e) => setForm({ ...form, first_name: e.target.value })}
             required
           />
 
@@ -178,22 +208,10 @@ const UserManagement = () => {
             value={form.role}
             onChange={(e) => setForm({ ...form, role: e.target.value })}
           >
-            <option value="Administrador">Administrador</option>
-            <option value="Asesor de ventas">Asesor de ventas</option>
+            <option value="admin">Administrador</option>
+            <option value="cliente">Cliente</option>
+            <option value="director">Director</option>
           </select>
-
-          {view === "create" && (
-            <>
-              <label className="block mb-2">Contraseña</label>
-              <input
-                type="password"
-                className="border w-full px-3 py-2 mb-4 rounded"
-                value={form.password}
-                onChange={(e) => setForm({ ...form, password: e.target.value })}
-                required
-              />
-            </>
-          )}
 
           <div className="flex justify-end gap-3">
             <button

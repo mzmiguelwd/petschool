@@ -4,7 +4,14 @@ from .models import CustomUser
 
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(style={'input_type': 'password'}, write_only=True)
+    password = serializers.CharField(
+        style={'input_type': 'password'},
+        write_only=True,
+        required=False  # IMPORTANTE
+    )
+
+    email = serializers.EmailField(required=False)
+    identification = serializers.CharField(required=False)
 
     # Custom format for created_at and updated_at field.
     # Ensures the data/time is returned in 'DD/MM/YYYY HH:MM' format and is read-only.
@@ -13,7 +20,8 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CustomUser
-        fields = ['identification',
+        fields = ['id',
+                  'identification',
                   'email',
                   'first_name',
                   'last_name',
@@ -21,7 +29,8 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
                   'address',
                   'password',
                   'created_at',
-                  'updated_at']
+                  'updated_at',
+                  'role']
 
     def create(self, validated_data):
             password = validated_data.pop('password')
@@ -53,8 +62,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
         ]
 
     def update(self, instance, validated_data):
-        # actualizar sólo campos permitidos
-        for attr in ['identification', 'first_name', 'last_name', 'phone', 'address']:
+        for attr in ['identification', 'first_name', 'last_name', 'phone', 'address', 'role']:
             if attr in validated_data:
                 setattr(instance, attr, validated_data[attr])
         instance.save()
