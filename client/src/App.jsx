@@ -32,6 +32,7 @@ import UserManagement from "./pages/UserManagement";
 // Componente de Protección
 import RequireRole from "./components/RequireRole";
 import DashboardDirector from "./pages/DashboardDirector";
+import Admin from "./pages/Admin";
 
 // --- Definición de Roles (Coincide con Django: cliente, director, admin) ---
 const DJANGO_ROLES = {
@@ -101,10 +102,12 @@ const App = () => {
           {/* 3. Rutas EXCLUSIVAS para ADMINISTRADORES (Rol: 'admin') */}
           {/* Estas rutas manejan la gestión de usuarios, el nivel más alto de control. */}
           <Route element={<RequireRole allowedRoles={[DJANGO_ROLES.ADMIN]} />}>
-            <Route path="/admin/dashboard" element={<UserManagement />} />
+            <Route path="/admin/dashboard" element={<Admin />} />
+            <Route path="/admin/users-management" element={<UserManagement />} />
             <Route path="/users" element={<UsersPage />} />
             <Route path="/users-create" element={<UserFormPage />} />
             <Route path="/users/:id" element={<UserFormPage />} />
+            
           </Route>
 
           {/* ------------------------------------------------------------- */}

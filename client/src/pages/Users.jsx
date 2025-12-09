@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { useUsersApiPrivate } from "../hooks/useUsersApiPrivate";
+import axios from "axios";
+import useUsersApiPrivate from "../hooks/useUsersApiPrivate";
 import { useNavigate, useLocation } from "react-router-dom";
 
 const Users = () => {
@@ -20,6 +21,11 @@ const Users = () => {
         console.log(response.data);
         isMounted && setUsers(response.data);
       } catch (error) {
+        // Petición cancelada: ignorar (React StrictMode/Unmount)
+        if (error?.code === "ERR_CANCELED" || error?.name === "CanceledError") {
+          console.log("Request canceled:", error.message || error);
+          return;
+        }
         console.error(error);
         navigate("/login", { state: { from: location }, replace: true });
       }

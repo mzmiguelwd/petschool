@@ -18,3 +18,5 @@ tzdata==2025.2
 uritemplate==4.2.0
 djangorestframework-simplejwt==5.5.1
 django-extensions==4.1
+requests==2.31.0
+react-google-recaptcha==0.3.0

@@ -12,7 +12,7 @@ import { motion } from "motion/react";
 import { slipeUp } from "../../components/landing/utils/animations";
 import { Mail, Lock, Loader2, Info, UserCircle2, LogOut } from "lucide-react";
 import { usersApi } from "../../api/users.api";
-
+import ReCAPTCHA from "react-google-recaptcha";
 import useAuth from "../../hooks/useAuth";
 import LandingHeader from "../../components/landing/LandingHeader";
 import LandingFooter from "../../components/landing/LandingFooter";
@@ -77,10 +77,14 @@ const LoginPage = () => {
   const userRef = useRef(null);
   const errRef = useRef(null);
 
+  const captchaRef = useRef(null); //ref para el captcha
+
   const [user, setUser] = useState("");
   const [password, setPassword] = useState("");
   const [errMsg, setErrMsg] = useState("");
   const [isLoading, setIsLoading] = useState(false); // Nuevo estado de carga
+  const [captchaToken, setCaptchaToken] = useState(""); // Estado para el token
+
 
   useEffect(() => {
     userRef.current.focus();
@@ -100,14 +104,30 @@ const LoginPage = () => {
     }
   }, [errMsg]);
 
+  // Maneja el cambio del captcha
+  const handleCaptchaChange = (token) => {
+      setCaptchaToken(token);
+  }; 
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
+
+    // === PASO 1: Validar la existencia del token de CAPTCHA ===
+    const currentCaptchaToken = captchaRef.current?.getValue();
+    if (!currentCaptchaToken) {
+        setErrMsg("Por favor, completa la verificación CAPTCHA.");
+        setIsLoading(false);
+        //enfocar el error
+        errRef.current.focus(); 
+        return;
+    }
 
     try {
       const payload = {
         email: user,
         password: password,
+        "g-recaptcha-response": currentCaptchaToken, // Lo que Django esperará
       };
 
       console.log("Payload a enviar:", payload);
@@ -150,6 +170,7 @@ const LoginPage = () => {
       // --- Limpieza
       setUser("");
       setPassword("");
+      captchaRef.current.reset();
 
       // notificación ---
       toast.success("¡Inicio de sesión exitoso!", {
@@ -159,11 +180,16 @@ const LoginPage = () => {
       navigate(targetPath, { replace: true });
     } catch (err) {
       console.error("Error en el login:", err);
+      captchaRef.current.reset(); // Resetea el captcha en caso de error
 
       if (err.response) {
         // El servidor respondió con un código fuera del rango 2xx
         if (err.response?.status === 400) {
-          setErrMsg("Faltan credenciales.");
+          if (detail && detail.includes("CAPTCHA")) {
+              setErrMsg(detail); // Mostrar mensaje específico de Django si existe
+          } else {
+              setErrMsg("Faltan credenciales o CAPTCHA inválido.");
+          }
         } else if (err.response?.status === 401) {
           setErrMsg("Credenciales Inválidas");
         } else {
@@ -241,6 +267,15 @@ const LoginPage = () => {
               onChange={(e) => setPassword(e.target.value)}
               required
             />
+
+            {/* ========== ReCAPTCHA v2 Widget ========== */}
+            <div className="mt-4 mb-6">
+                <ReCAPTCHA
+                    sitekey="6LdDQyYsAAAAAHb3rN5nFINtylLxy1C64_oqi8vj" // ¡clave de sitio!
+                    ref={captchaRef}
+                    // onChange={handleCaptchaChange} // No es estrictamente necesario para v2 con la ref
+                />
+            </div>
 
             {/* ========== Botón ========== */}
             <button
