@@ -206,6 +206,7 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
     ),
+    'EXCEPTION_HANDLER': 'rest_framework.views.exception_handler'
 }
 
 # --- DRF Spectacular Settings (OpenAPI/Swagger) ---
@@ -237,4 +238,25 @@ SIMPLE_JWT = {
     'USERNAME_FIELD': 'email',  # Si usas email para login
     'TOKEN_OBTAIN_SERIALIZER': 'rest_framework_simplejwt.serializers.TokenObtainPairSerializer',
     # ... otras configuraciones
+}
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+        },
+    },
+    "loggers": {
+        "django.request": {
+            "handlers": ["console"],
+            "level": "DEBUG",
+            "propagate": True,
+        },
+        "django": {
+            "handlers": ["console"],
+            "level": "DEBUG",
+        },
+    },
 }
