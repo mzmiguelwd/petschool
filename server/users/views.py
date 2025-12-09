@@ -12,9 +12,6 @@ from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
 )
-<<<<<<< Updated upstream
-
-=======
 from .utils import check_recaptcha
 from django.conf import settings
 
@@ -73,7 +70,6 @@ class RecaptchaTokenObtainPairView(TokenObtainPairView):
                 del response.data['refresh'] # Quitarlo de la respuesta JSON
         
         return response
->>>>>>> Stashed changes
 
 class RegisterView(CreateAPIView):
     """Permite el registro de un nuevo usuario sin requerir autenticación."""

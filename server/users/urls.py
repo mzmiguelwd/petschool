@@ -6,7 +6,7 @@ from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
 )
-from .views import CookieTokenRefreshView
+from .views import RecaptchaTokenObtainPairView, CookieTokenRefreshView
 
 
 router = routers.DefaultRouter()
@@ -20,7 +20,7 @@ router.register(r'public', views.PublicUserListViewSet, basename='users-public')
 
 urlpatterns = [
     # Autenticación JWT
-    path("auth/login/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
+    path("auth/login/", RecaptchaTokenObtainPairView.as_view(), name="token_obtain_pair_recaptcha"),
     path("auth/refresh/", CookieTokenRefreshView.as_view(), name="token_refresh"),
 
     # Registro público

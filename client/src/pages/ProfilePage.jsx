@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import useAuth from "../hooks/useAuth";
-import NavbarCliente from "../components/NavbarCliente"; // Asumo que maneja navegación y logout
+import NavbarCliente from "../components/NavBarCliente"; // Asumo que maneja navegación y logout
 import { Link } from "react-router-dom";
 import { usersApiPrivate } from "../api/users.api"; // Asegúrate de tener esta instancia segura
 import useUsersApiPrivate from "../hooks/useUsersApiPrivate"; // Hook para llamadas protegidas
