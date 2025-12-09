@@ -7,7 +7,9 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test:e2e": "node ./test/dashboardTest.js",
+    "test:e2e:profile": "node ./test/profileUpdateTest.js"
   },
   "dependencies": {
     "@emailjs/browser": "^4.4.1",
@@ -25,6 +27,7 @@
     "react-hook-form": "^7.65.0",
     "react-hot-toast": "^2.6.0",
     "react-router-dom": "^7.9.4",
+    "selenium-webdriver": "^4.39.0",
     "tailwindcss": "^4.1.14"
   },
   "devDependencies": {
