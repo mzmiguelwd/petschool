@@ -241,3 +241,4 @@ SIMPLE_JWT = {
 
 # --- RECAPTCHA SETTINGS ---
 RECAPTCHA_SECRET_KEY = os.getenv("RECAPTCHA_SECRET_KEY")  # Clave secreta para validar los tokens de reCAPTCHA en el backend
+ENV = os.getenv("ENV", "production")

@@ -13,6 +13,7 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
 )
 from .utils import check_recaptcha
+from django.conf import settings
 
 class RecaptchaTokenObtainPairView(TokenObtainPairView):
     """
@@ -32,7 +33,12 @@ class RecaptchaTokenObtainPairView(TokenObtainPairView):
             )
 
         # 2. VALIDAR EL RECAPTCHA
-        is_valid_recaptcha = check_recaptcha(recaptcha_token)
+        if settings.ENV == "test" and recaptcha_token == "test-token":
+            # Saltamos la verificación real
+            is_valid_recaptcha = True
+        else:
+            # Validación normal
+            is_valid_recaptcha = check_recaptcha(recaptcha_token)
 
         if not is_valid_recaptcha:
             # 3. Denegar si la verificación de reCAPTCHA falla

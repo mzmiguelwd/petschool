@@ -69,6 +69,7 @@ InputField.displayName = "InputField";
 const LOGIN_URL = "/users/auth/login/";
 
 const LoginPage = () => {
+  const isTest = false
   const { setAuth } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
@@ -114,13 +115,13 @@ const LoginPage = () => {
     setIsLoading(true);
 
     // === PASO 1: Validar la existencia del token de CAPTCHA ===
-    const currentCaptchaToken = captchaRef.current?.getValue();
+    const currentCaptchaToken = captchaRef.current?.value || captchaRef.current?.getValue();
+
     if (!currentCaptchaToken) {
-        setErrMsg("Por favor, completa la verificación CAPTCHA.");
-        setIsLoading(false);
-        //enfocar el error
-        errRef.current.focus(); 
-        return;
+      setErrMsg("Por favor, completa la verificación CAPTCHA.");
+      setIsLoading(false);
+      errRef.current.focus();
+      return;
     }
 
     try {
@@ -170,7 +171,15 @@ const LoginPage = () => {
       // --- Limpieza
       setUser("");
       setPassword("");
-      captchaRef.current.reset();
+      if (captchaRef.current) {
+        // Si existe el método reset, lo llamamos
+        if (typeof captchaRef.current.reset === "function") {
+          captchaRef.current.reset();
+        } else {
+          // En test, es un input oculto, limpiamos su value manualmente
+          captchaRef.current.value = "";
+        }
+      }
 
       // notificación ---
       toast.success("¡Inicio de sesión exitoso!", {
@@ -180,7 +189,15 @@ const LoginPage = () => {
       navigate(targetPath, { replace: true });
     } catch (err) {
       console.error("Error en el login:", err);
-      captchaRef.current.reset(); // Resetea el captcha en caso de error
+      if (captchaRef.current) {
+        // Si existe el método reset, lo llamamos
+        if (typeof captchaRef.current.reset === "function") {
+          captchaRef.current.reset();
+        } else {
+          // En test, es un input oculto, limpiamos su value manualmente
+          captchaRef.current.value = "";
+        }
+      }
 
       if (err.response) {
         // El servidor respondió con un código fuera del rango 2xx
@@ -268,13 +285,17 @@ const LoginPage = () => {
               required
             />
 
-            {/* ========== ReCAPTCHA v2 Widget ========== */}
+            {/* ========== ReCAPTCHA v2 Widget ========== 6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI*/ }
             <div className="mt-4 mb-6">
+              {!isTest ? (
                 <ReCAPTCHA
-                    sitekey="6LdDQyYsAAAAAHb3rN5nFINtylLxy1C64_oqi8vj" // ¡clave de sitio!
-                    ref={captchaRef}
-                    // onChange={handleCaptchaChange} // No es estrictamente necesario para v2 con la ref
+                  sitekey="6LdDQyYsAAAAAHb3rN5nFINtylLxy1C64_oqi8vj" // tu sitekey real
+                  ref={captchaRef}
                 />
+              ) : (
+                // En test, no mostramos CAPTCHA pero ponemos un token simulado
+                <input type="hidden" name="g-recaptcha-response" value="test-token" ref={captchaRef} />
+              )}
             </div>
 
             {/* ========== Botón ========== */}
