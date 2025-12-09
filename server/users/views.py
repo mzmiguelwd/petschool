@@ -44,9 +44,14 @@ class ProfileView(RetrieveUpdateAPIView):
 
 # vista pública
 class PublicUserListViewSet(viewsets.ModelViewSet):
-    serializer_class = UserRegistrationSerializer # Puedes usar este o uno más simple para la gestión
+    serializer_class = UserProfileSerializer
     queryset = CustomUser.objects.all()
     permission_classes = [AllowAny]
+
+    # permitir actualizaciones parciales
+    def update(self, request, *args, **kwargs):
+        kwargs["partial"] = True
+        return super().update(request, *args, **kwargs)
 
 
 class CookieTokenRefreshView(TokenRefreshView):
