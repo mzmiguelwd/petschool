@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from "react";
 import useUsersApiPrivate from "../hooks/useUsersApiPrivate";
-import NavbarDirector from "../components/NavbarDirector"; // Asumo que tienes uno, o usa el genérico
+import NavbarDirector from "../components/NavBarDirector"; // Asumo que tienes uno, o usa el genérico
 import { format, addDays, subDays } from "date-fns";
 import { es } from "date-fns/locale";
 import {

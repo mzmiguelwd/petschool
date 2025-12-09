@@ -1,3 +1,4 @@
+# server/users/urls.py
 from django.urls import path, include
 from rest_framework import routers
 from users import views
@@ -5,44 +6,29 @@ from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
 )
+from .views import CookieTokenRefreshView
 
 
-# Initialize the DefaultRouter provided by Django REST Framework.
-# The router automatically generates URL patterns for standard CRUD operations (list, retrieve, create, update, destroy).
 router = routers.DefaultRouter()
 
+# CRUD protegido (solo admin/management)
+router.register(r'management', views.UserViewSet, basename='users-management')
 
-# 1. Registra el ViewSet de Gestión (CRUD PROTEGIDO)
-# La ruta base será: /api/v1/users/management/
-router.register(r'management', views.UserViewSet, basename='user-management')
+# Rutas públicas (listado público de usuarios)
+router.register(r'public', views.PublicUserListViewSet, basename='users-public')
 
-# 2. Rutas PÚBLICAS (Solo Listar y Detalle)
-# Rutas generadas: /api/v1/users/public-list/, /api/v1/users/public-list/{id}/
-# 🚨 Usamos 'public-list' para evitar conflictos con otras rutas.
-router.register(r'public-list', views.PublicUserListViewSet, basename='user-public')
 
-# Define the final URL patterns.
 urlpatterns = [
-    # 2. LOGIN JWT (Público)
-    # Ruta: /api/v1/auth/
-    path("auth/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
+    # Autenticación JWT
+    path("auth/login/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
+    path("auth/refresh/", CookieTokenRefreshView.as_view(), name="token_refresh"),
 
-    # 3. REFRESH TOKEN JWT (Público)
-    # Ruta: /api/v1/auth/refresh/
-    path("auth/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
+    # Registro público
+    path("register/", views.RegisterView.as_view(), name="user-register"),
+    
+    # Perfil del usuario logueado
+    path("me/", views.ProfileView.as_view(), name="user-profile"),
 
-    # 4. REGISTRO DE USUARIO (Público)
-    # Ruta: /api/v1/register/
-    path(
-        "register/",
-        views.RegisterView.as_view(), # Usa la vista basada en GenericAPIView (RegisterView)
-        name="user-register"
-    ),
-
-    # 5. INCLUIR LAS RUTAS DEL ROUTER (CRUD PROTEGIDO)
-    # Esto genera /api/v1/users/management/, /api/v1/users/management/<id>, etc.
+    # Rutas del router (management, public-list, etc.)
     path("", include(router.urls)),
-
-    # 6. Perfil del usuario logueado
-    path("me/", views.MyProfileView.as_view(), name="user-profile"),
 ]

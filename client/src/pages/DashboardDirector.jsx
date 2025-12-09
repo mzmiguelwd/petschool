@@ -4,7 +4,7 @@ import BreedChart from "../components/charts/BreedChart";
 import SizeChart from "../components/charts/SizeChart";
 import PlanChart from "../components/charts/PlanChart";
 import TopAttendanceChart from "../components/charts/TopAttendanceChart";
-import NavbarDirector from "../components/NavbarDirector";
+import NavbarDirector from "../components/NavBarDirector";
 import useUsersApiPrivate from "../hooks/useUsersApiPrivate";
 
 const DashboardDirector = () => {

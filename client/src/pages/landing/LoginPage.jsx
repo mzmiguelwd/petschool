@@ -66,7 +66,7 @@ const InputField = memo(
 );
 InputField.displayName = "InputField";
 
-const LOGIN_URL = "/users/auth/";
+const LOGIN_URL = "/users/auth/login/";
 
 const LoginPage = () => {
   const { setAuth } = useAuth();
@@ -129,6 +129,24 @@ const LoginPage = () => {
       // --- Guardar en el contexto global ---
       setAuth({ user: userData, accessToken });
 
+      const userRole = userData.role;
+      let targetPath = "/";
+
+      switch (userRole) {
+        case "cliente":
+          targetPath = "/cliente/dashboard";
+          break;
+        case "director":
+          targetPath = "/director/dashboard";
+          break;
+        case "admin":
+          targetPath = "/admin/dashboard";
+          break;
+        default:
+          targetPath = "/unauthorized";
+          break;
+      }
+
       // --- Limpieza
       setUser("");
       setPassword("");
@@ -138,7 +156,7 @@ const LoginPage = () => {
         style: { background: "#101010", color: "#fff" },
       });
 
-      navigate("/profile");
+      navigate(targetPath, { replace: true });
     } catch (err) {
       console.error("Error en el login:", err);
 

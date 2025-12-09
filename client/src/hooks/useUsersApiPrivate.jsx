@@ -11,9 +11,12 @@ const useUsersApiPrivate = () => {
   useEffect(() => {
     const requestIntercept = usersApiPrivate.interceptors.request.use(
       (config) => {
+        config.withCredentials = true;
+
         if (!config.headers["Authorization"]) {
           config.headers["Authorization"] = `Bearer ${auth?.accessToken}`;
         }
+
         return config;
       },
       (error) => Promise.reject(error)
@@ -23,12 +26,26 @@ const useUsersApiPrivate = () => {
       (response) => response,
       async (error) => {
         const prevRequest = error?.config;
-        if (error?.response.status === 403 && !prevRequest?.sent) {
+
+        if (prevRequest?.url?.includes("/users/auth/refresh/")) {
+          return Promise.reject(error);
+        }
+
+        if (
+          (error?.response?.status === 401 ||
+            error?.response?.status === 403) &&
+          !prevRequest?.sent
+        ) {
           prevRequest.sent = true;
+
           const newAccessToken = await refresh();
+
           prevRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
+          prevRequest.withCredentials = true;
+
           return usersApiPrivate(prevRequest);
         }
+
         return Promise.reject(error);
       }
     );

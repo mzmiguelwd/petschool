@@ -24,7 +24,6 @@ ADDRESS_REGEX_VALIDATOR = RegexValidator(
     message='La dirección debe tener entre 6 y 80 caracteres y solo puede contener letras, números, espacios y los símbolos: # - . , ñ.'
 )
 
-# Create your models here.
 
 class CustomUser (AbstractUser):
     """
@@ -35,6 +34,13 @@ class CustomUser (AbstractUser):
     redefine 'email' for uniqueness.
     """
 
+    ROLES = (
+        ('cliente', 'Cliente'),
+        ('director', 'Director'),
+        ('admin', 'Administrador'),
+    )
+    role = models.CharField(max_length=20, choices=ROLES, default='cliente')
+    
     identification = models.CharField(
         max_length=24,
         unique=True,
@@ -80,10 +86,10 @@ class CustomUser (AbstractUser):
         verbose_name_plural = "Usuarios"
         # Default ordering: Lists users from newest to oldest basen on creation time.
         ordering = ["-created_at"]
-
-def __str__(self):
-    """
-    Human-readable representation of the object instance.
-    Uses the email as the primary identifier in the Django Admin.
-    """
-    return self.email
+        
+    def __str__(self):
+        """
+        Human-readable representation of the object instance.
+        Uses the email as the primary identifier in the Django Admin.
+        """
+        return self.email

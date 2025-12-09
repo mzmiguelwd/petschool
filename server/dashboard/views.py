@@ -1,17 +1,19 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import permissions, viewsets
-from matriculas.models import Matricula, Asistencia
+from matriculas.models import Matricula, Asistencia, User
 from django.db.models import Count
 from django.db.models import Count, F
 from .serializer import (
     DashboardDirectorSerializer,
+    DashboardClienteSerializer,
+    CaninoMatriculadoSerializer,
 )
 import csv
 from django.http import HttpResponse
 
 class DashboardDirectorView(viewsets.ViewSet):
-    permission_classes = [permissions.AllowAny]  # luego cambiar a IsAuthenticated
+    permission_classes = [permissions.IsAuthenticated]
 
     def list(self, request):
         #Cantidad de matrículas por raza

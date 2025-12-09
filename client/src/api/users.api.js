@@ -1,3 +1,4 @@
+// usersApi.api.js
 import axios from "axios";
 
 // Coonfiguración Base
@@ -30,7 +31,7 @@ export const createUser = (userData) =>
  * Corresponds to: GET /api/v1/users/
  * @returns {Promise} Axios promise resolving to the list of users.
  */
-export const getAllUsers = () => usersApi.get("users/public-list");
+export const getAllUsers = () => usersApi.get("users/public");
 
 /**
  * Fetches a single user record by ID.
@@ -46,7 +47,7 @@ export const getUser = (id) => usersApi.get(`${id}/`);
  * @param {number|string} id - The unique identifier of the user to delete.
  * @returns {Promise} Axios promise resolving upon successful deletion (usually status 204).
  */
-export const deleteUser = (id) => usersApi.delete(`${id}/`);
+export const deleteUser = (id) => usersApi.delete(`users/public/${id}/`);
 
 /**
  * Updates an existing user record with new data.
@@ -55,4 +56,54 @@ export const deleteUser = (id) => usersApi.delete(`${id}/`);
  * @param {object} user - The updated data object for the user.
  * @returns {Promise} Axios promise resolving to the updated user object.
  */
-export const updateUser = (id, user) => usersApi.put(`${id}/`, user);
+export const updateUser = (id, user) => usersApi.put(`users/public/${id}/`, user);
+
+function _readAuth() {
+  const raw = localStorage.getItem("auth");
+  if (!raw) return null;
+  try {
+    const parsed = JSON.parse(raw); // puede devolver object o string
+    return typeof parsed === "string" ? JSON.parse(parsed) : parsed;
+  } catch (e) {
+    // si no es JSON válido, devolver null
+    return null;
+  }
+}
+
+function getStoredToken() {
+  const auth = _readAuth();
+  // tu objeto puede tener accessToken o estar anidado; intentar varias claves
+  return auth?.accessToken || auth?.auth?.accessToken || null;
+}
+
+export async function getProfile() {
+  const token = getStoredToken();
+  console.log("Token:", token);
+  const res = await fetch("/api/users/me/", {
+    headers: {
+      "Content-Type": "application/json",
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    },
+    cache: "no-cache",
+  });
+  console.log(res);
+  if (!res.ok) throw new Error("No se pudo cargar el perfil");
+  return res.json();
+}
+
+export async function updateProfile(payload) {
+  const token = getStoredToken();
+  const res = await fetch("/api/users/me/", {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    },
+    body: JSON.stringify(payload),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw err;
+  }
+  return res.json();
+}
