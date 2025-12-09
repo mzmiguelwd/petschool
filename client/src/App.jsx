@@ -18,10 +18,15 @@ import DirectorDashboard from "./pages/DashboardDirector";
 import UserManagement from "./pages/UserManagement";
 import RequireAuth from "./components/RequireAuth";
 
-const ROLES = {
-  User: 2001,
-  Editor: 1984,
-  Admin: 5150,
+// Componente de Protección
+import RequireRole from "./components/RequireRole";
+import DashboardDirector from "./pages/DashboardDirector";
+
+// --- Definición de Roles (Coincide con Django: cliente, director, admin) ---
+const DJANGO_ROLES = {
+  CLIENTE: "cliente",
+  DIRECTOR: "director",
+  ADMIN: "admin",
 };
 
 const App = () => {
@@ -48,9 +53,23 @@ const App = () => {
             <Route path="/profile" element={<ProfilePage />} />
           </Route>
 
-          {/* We want to protect these routes */}
-          <Route element={<RequireAuth allowedRoles={[ROLES.User]} />}>
-            <Route path="/" />
+          {/* 2. Rutas para DIRECTORES y ADMINISTRADORES (Roles: 'director', 'admin') */}
+          <Route
+            element={
+              <RequireRole
+                allowedRoles={[DJANGO_ROLES.DIRECTOR, DJANGO_ROLES.ADMIN]}
+              />
+            }
+          >
+            <Route
+              path="/director/dashboard"
+              element={<DashboardDirector />}
+            />
+            {/* Las rutas de gestión de matrículas generalmente son para Director/Admin */}
+            <Route path="/matriculas" element={<MatriculasPage />} />
+            <Route path="/matriculas/create" element={<MatriculaFormPage />} />
+            <Route path="/matriculas/:id" element={<MatriculaFormPage />} />
+            <Route path="/director/asistencias" element={<AttendanceDirectorPage />} />
           </Route>
 
           {/* Admin/User Management Routes */}

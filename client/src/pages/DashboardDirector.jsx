@@ -1,16 +1,21 @@
 import React, { useEffect, useState } from "react";
-import { getDashboardData, downloadCSV } from "../api/dashboard.api";
-import NavBarDirector from "../components/NavBarDirector";
+import { getDashboardDirectorData, downloadCSV } from "../api/dashboard.api";
 import BreedChart from "../components/charts/BreedChart";
 import SizeChart from "../components/charts/SizeChart";
 import PlanChart from "../components/charts/PlanChart";
 import TopAttendanceChart from "../components/charts/TopAttendanceChart";
+import NavbarDirector from "../components/NavbarDirector";
+import useUsersApiPrivate from "../hooks/useUsersApiPrivate";
 
 const DashboardDirector = () => {
+  const usersApiPrivate = useUsersApiPrivate();
   const [data, setData] = useState(null);
 
   useEffect(() => {
-    getDashboardData().then(setData);
+    getDashboardDirectorData(usersApiPrivate).then((resp) => {
+      const directorData = resp?.director ?? resp;
+      setData(directorData);
+    });
   }, []);
 
   const handleLogout = () => {
@@ -23,7 +28,7 @@ const DashboardDirector = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <NavBarDirector onLogout={handleLogout} />
+      <NavbarDirector onLogout={handleLogout} />
 
       <main className="p-6 space-y-8">
         <div className="flex space-x-4 mb-6">

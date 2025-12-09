@@ -1,4 +1,5 @@
 import useAuth from "../hooks/useAuth";
+import NavbarCliente from "../components/NavBarCliente"; // Asumo que maneja navegación y logout
 import { Link } from "react-router-dom";
 
 const ProfilePage = () => {

@@ -16,14 +16,14 @@ class DashboardDirectorView(viewsets.ViewSet):
     def list(self, request):
         #Cantidad de matrículas por raza
         matriculas_por_raza = list(
-            Matricula.objects.values(label=F('raza'))
+            Matricula.objects.values(label=F('canino__raza'))
             .annotate(total=Count('id'))
             .order_by('-total')
         )
 
         #Cantidad de matrículas por tamaño
         matriculas_por_tamano = list(
-            Matricula.objects.values(label=F('tamano'))
+            Matricula.objects.values(label=F('canino__tamano'))
             .annotate(total=Count('id'))
             .order_by('-total')
         )
@@ -41,8 +41,10 @@ class DashboardDirectorView(viewsets.ViewSet):
             ]
 
         #Top 5 caninos con mayor asistencia
+        # aliasar el campo para que la clave sea 'nombre_canino' y coincida con el serializer
         top_5_asistencia = list(
-            Asistencia.objects.values('matricula__nombre_canino')
+            Asistencia.objects
+            .values(nombre_canino=F('matricula__canino__nombre'))
             .annotate(total_asistencias=Count('id'))
             .order_by('-total_asistencias')[:5]
         )
@@ -55,7 +57,7 @@ class DashboardDirectorView(viewsets.ViewSet):
             'top_5_asistencia': top_5_asistencia,
         }
 
-        serializer = DashboardDirectorSerializer(data)
+        serializer = DashboardDirectorSerializer(instance=data)
         return Response(serializer.data)
 
 class ReporteCSVView(APIView):
@@ -105,3 +107,34 @@ class ReporteCSVView(APIView):
         writer.writerows(rows)
 
         return response
+    
+class DashboardClienteView(viewsets.ViewSet):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def list(self, request):
+        cliente = request.user
+        
+        # MATRÍCULAS SOLO DEL CLIENTE
+        matriculas = Matricula.objects.filter(canino__cliente=cliente)
+        caninos_data = CaninoMatriculadoSerializer(matriculas, many=True).data
+        
+        # ASISTENCIAS SOLO DEL CLIENTE (aliasar para 'nombre_canino')
+        asistencias_qs = (
+            Asistencia.objects
+            .filter(matricula__canino__cliente=cliente)
+            .values(nombre_canino=F('matricula__canino__nombre'))
+            .annotate(total_asistencias=Count('id'))
+        )
+
+        asistencias_data = [
+            {'nombre_canino': a['nombre_canino'], 'total_asistencias': a['total_asistencias']}
+            for a in asistencias_qs
+        ]
+        
+        data = {
+            'caninos_matriculados': caninos_data,
+            'asistencias': asistencias_data
+        }
+        
+        serializer = DashboardClienteSerializer(instance=data)
+        return Response(serializer.data)
