@@ -238,3 +238,6 @@ SIMPLE_JWT = {
     'TOKEN_OBTAIN_SERIALIZER': 'rest_framework_simplejwt.serializers.TokenObtainPairSerializer',
     # ... otras configuraciones
 }
+
+# --- RECAPTCHA SETTINGS ---
+RECAPTCHA_SECRET_KEY = os.getenv("RECAPTCHA_SECRET_KEY")  # Clave secreta para validar los tokens de reCAPTCHA en el backend
