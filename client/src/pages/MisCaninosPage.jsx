@@ -4,6 +4,7 @@ import useAuth from "../hooks/useAuth";
 import NavbarCliente from "../components/NavbarCliente";
 import { PlusCircle, Dog, Loader2, Edit, Trash2 } from "lucide-react";
 import { toast } from "react-hot-toast";
+import { Link } from "react-router-dom";
 
 const MisCaninosPage = () => {
   const apiPrivate = useUsersApiPrivate();
@@ -238,6 +239,17 @@ const CaninosList = ({ list, loading }) => {
               </p>
             )}
           </div>
+          {canino.matricula ? (
+            <span className="inline-block bg-green-100 text-green-700 px-3 py-1 text-xs rounded-full mt-3">
+              ✔ Ya matriculado
+            </span>
+          ) : (
+            <Link to={`/cliente/registrar-matricula?canino=${canino.id}`}>
+              <button className="mt-3 bg-blue-600 text-white px-3 py-1 rounded">
+                Matricular
+              </button>
+            </Link>
+          )}
         </div>
       ))}
     </div>

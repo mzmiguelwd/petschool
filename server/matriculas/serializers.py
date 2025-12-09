@@ -1,87 +1,118 @@
-# server/matriculas/serializers.py
 from rest_framework import serializers
-from .models import Matricula
-from .models import Asistencia
-from .models import Canino
+from .models import Matricula, Asistencia, Canino
 
 
-# Serializador para la creación y gestión de Caninos
-class CaninoSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Canino
-        # Incluye todos los campos excepto el cliente, que lo asignaremos en la vista.
-        fields = [
-            'id', 
-            'nombre', 
-            'raza', 
-            'edad', 
-            'tamano', 
-            'observaciones_medicas',
-            # 'cliente' NO se incluye aquí, se asigna automáticamente en el ViewSet
-        ]
-        # Asegúrate de que nadie pueda modificar las fechas de creación.
-        read_only_fields = ('fecha_creacion', 'fecha_actualizacion')
 
 
-# ===================================================================
-# 1. SERIALIZADOR PARA LAS ASISTENCIAS (AttendanceChart)
-# ===================================================================
+# ============================================================
+# 2. ASISTENCIAS (Dashboard)
+# ============================================================
 class AsistenciaDashboardSerializer(serializers.ModelSerializer):
-    # CRÍTICO: Accede al nombre del canino a través de la doble relación: 
-    # Asistencia -> Matricula -> Canino -> nombre
-    nombre_canino = serializers.CharField(source='matricula.canino.nombre', read_only=True)
-    
+    nombre_canino = serializers.CharField(
+        source='matricula.canino.nombre', read_only=True
+    )
+
     class Meta:
         model = Asistencia
-        fields = [
-            'fecha',
-            'presente',
-            'nombre_canino'
-        ]
+        fields = ['fecha', 'presente', 'nombre_canino']
 
 
-# ===================================================================
-# 2. SERIALIZADOR PARA LAS MATRÍCULAS/CANINOS (PetsChart)
-# ===================================================================
+# ============================================================
+# 3. MATRÍCULAS - Dashboard
+# ============================================================
 class MatriculaDashboardSerializer(serializers.ModelSerializer):
-    # CRÍTICO: Accede al nombre del canino a través de la relación de FK
-    # Matricula -> Canino -> nombre
     nombre_canino = serializers.CharField(source='canino.nombre', read_only=True)
-    
-    # Convierte el valor interno del plan (ej: '1_mes') a su etiqueta visible (ej: '1 mes')
     plan = serializers.CharField(source='get_plan_display', read_only=True)
-    
-    # Mapea el campo 'estado' del modelo al nombre 'estado_pago' esperado por el frontend
+    transporte = serializers.CharField(source='get_transporte_display', read_only=True)
     estado_pago = serializers.CharField(source='estado', read_only=True)
 
     class Meta:
         model = Matricula
         fields = [
-            'nombre_canino', 
-            'plan', 
-            'fecha_inicio', 
-            'fecha_vencimiento', 
+            'id',
+            'nombre_canino',
+            'plan',
+            'transporte',
+            'fecha_inicio',
+            'fecha_vencimiento',
             'estado_pago',
         ]
 
 
-# ===================================================================
-# 3. Serializador General (Lo mantienes para otras operaciones CRUD)
-# ===================================================================
+# ============================================================
+# 4. MATRÍCULAS - CRUD
+# ============================================================
 class MatriculaSerializer(serializers.ModelSerializer):
-    # Campos adicionales que se calculan (solo lectura)
-    # Nota: get_full_name es un método de AbstractUser que CustomUser hereda.
-    cliente_nombre = serializers.CharField(source='cliente.get_full_name', read_only=True) 
+    cliente_nombre = serializers.CharField(source='cliente.get_full_name', read_only=True)
     cliente_email = serializers.CharField(source='cliente.email', read_only=True)
-    
-    # Relación con asistencias (solo lectura) - Si lo necesitas anidado en otras vistas
-    # Lo he renombrado para usar el serializer específico del dashboard, si lo deseas anidar
-    asistencias = AsistenciaDashboardSerializer(many=True, read_only=True) 
-    
+
+    # Información del canino (mínima para frontend)
+    canino_nombre = serializers.CharField(source='canino.nombre', read_only=True)
+
+    asistencias = AsistenciaDashboardSerializer(many=True, read_only=True)
+
     class Meta:
         model = Matricula
-        # IMPORTANTE: Ya que Matricula ya no tiene los campos de Canino, '__all__' 
-        # es ahora más limpio para operaciones CRUD.
-        fields = '__all__'
-        read_only_fields = ('cliente', 'fecha_creacion', 'fecha_actualizacion') 
-        # Nota: 'fecha_fin' no existe en tu modelo.
+        fields = [
+            'id',
+            'cliente',
+            'cliente_nombre',
+            'cliente_email',
+
+            'canino',
+            'canino_nombre',
+
+            'plan',
+            'transporte',
+
+            'fecha_inicio',
+            'fecha_vencimiento',
+
+            'observaciones',
+            'estado',
+
+            'asistencias',
+
+            'fecha_creacion',
+            'fecha_actualizacion',
+        ]
+
+        read_only_fields = (
+            'cliente',
+            'fecha_vencimiento',
+            'estado',
+            'fecha_creacion',
+            'fecha_actualizacion',
+        )
+
+# ============================================================
+# 1. CANINOS
+# ============================================================
+class CaninoSerializer(serializers.ModelSerializer):
+    matricula = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Canino
+        fields = [
+            'id',
+            'nombre',
+            'raza',
+            'edad',
+            'tamano',
+            'observaciones_medicas',
+            'matricula',
+        ]
+
+    def get_matricula(self, obj):
+        """
+        Retorna la matrícula activa o la más reciente si no hay activa.
+        Esto permite al frontend saber si el canino está matriculado.
+        """
+        # Matrícula activa
+        activa = obj.matriculas_activas.filter(estado='aprobada').order_by('-fecha_inicio').first()
+        if activa:
+            return MatriculaDashboardSerializer(activa).data
+
+        # Matrícula más reciente (si quieres permitir pendientes)
+        reciente = obj.matriculas_activas.order_by('-fecha_inicio').first()
+        return MatriculaDashboardSerializer(reciente).data if reciente else None
